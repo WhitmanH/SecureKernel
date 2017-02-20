@@ -1,0 +1,53 @@
+#include "system.h"
+
+extern char* vram;
+extern unsigned int current_loc;
+
+void newlineX2(void){
+	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
+	current_loc = current_loc + (line_size - current_loc % (line_size));
+	current_loc = current_loc + (line_size - current_loc % (line_size));
+}
+
+void newlineX1(void){
+	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
+	current_loc = current_loc + (line_size - current_loc % (line_size));
+}
+
+void newCommand(void){
+	const char* pwd = "Soteria@CAMEL:/$ ";
+	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
+	current_loc = current_loc + (line_size - current_loc % (line_size));
+	message(pwd);
+}
+
+void clearScreen(void){
+	unsigned int i = 0, j = 0;
+	/*
+	* Loop clears the screen. There exists 25 lines of 80 columns, and each element
+	* takes 2 bytes.
+	*/
+	while(j < 80 * 25 * 2){
+		//Print blank character
+		vram[j] = ' ';
+		//Highlight next character a light gray
+		vram[j+1]= 0x07;
+		j = j + 2;
+	}
+	current_loc = 0;
+}
+
+void message(const char* message){
+	unsigned int j = 0;
+	/*
+	* Writing the string to VRAM.
+	*/
+	while(message[j] != '\0'){
+		/* Printing the sting */
+		vram[current_loc] = message[j];
+		/* Declaring font color, black bg, light grey fg */
+		vram[current_loc+1] = 0x07;
+		++j;
+		current_loc = current_loc + 2;
+	}
+}

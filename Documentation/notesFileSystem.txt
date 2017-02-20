@@ -1,0 +1,14 @@
+http://www.tldp.org/HOWTO/Bootdisk-HOWTO/buildroot.html
+A root filesystem must contain everything needed to support a full Linux system. To be able to do this, the disk must include the minimum requirements for a Linux system:
+
+    The basic file system structure,
+
+    Minimum set of directories: /dev, /proc, /bin, /etc, /lib, /usr, /tmp,
+
+    Basic set of utilities: sh, ls, cp, mv, etc.,
+
+    Minimum set of config files: rc, inittab, fstab, etc.,
+
+    Devices: /dev/hd*, /dev/tty*, /dev/fd0, etc.,
+
+    Runtime library to provide basic functions used by utilities.

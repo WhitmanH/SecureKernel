@@ -5,18 +5,13 @@
 */
 
 #include "keyboard_map.h"
+#include "system.h"
 
-/*
-* Global Values
-*/
-
-
-#define IDT_SIZE 256
-#define KEYBOARD_STATUS_PORT 0x64
-#define KEYBOARD_DATA_PORT 0x60
-#define COLUMNS_IN_LINE 80
-#define LINES 25
-#define BYTES_FOR_EACH_ELEMENT 2
+extern unsigned char keyboard_map[128];
+extern void keyboard_handler(void);
+extern char read_port(unsigned short port);
+extern void write_port(unsigned short port, unsigned char data);
+extern void load_idt(unsigned long *IDT_ptr);
 
 /*
 * Global Variables
@@ -24,12 +19,6 @@
 char *vram = (char*)0xb8000; 
 unsigned int current_loc = 0;
 
-
-extern unsigned char keyboard_map[128];
-extern void keyboard_handler(void);
-extern char read_port(unsigned short port);
-extern void write_port(unsigned short port, unsigned char data);
-extern void load_idt(unsigned long *IDT_ptr);
 
 /*
 * Interrupt Descripter Table (IDT)
@@ -58,18 +47,25 @@ void IDT_init(void){
 	IDT[0x21].offset_hBits = (keyboard_address & 0xffff0000) >> 16;
 
 
+	/*Port Guide
+	*PIC1: 0x20 for command and 0x21 for data
+	*PIC2: 0xA0 for Command and 0xA1 for data
+	*Initialization done here: http://stanislavs.org/helppc/8259.html
+	* 0x11 is the initialize command for both PICs
+	*/
+	//ICW1 Initialisation Command Word One)
 	write_port(0x20, 0x11);
 	write_port(0xA0, 0x11);
-
-	write_port(0x21, 0x20);
+	//ICW2
+	write_port(0x21, 0x20); //0x21 comes from adding 1 bit to find the interrupt number from where PIC1 is initialized at 0x20.
 	write_port(0xA1, 0x28);
-
+	//ICW3
 	write_port(0x21, 0x00);
 	write_port(0xA1, 0x00);
-
+	//ICW4
 	write_port(0x21, 0x01);
 	write_port(0xA1, 0x01);
-
+	//Mask interrupts
 	write_port(0x21, 0xff);
 	write_port(0xA1, 0xff);
 
@@ -79,8 +75,13 @@ void IDT_init(void){
 	IDT_ptr[1] = IDT_address >> 16;
 	load_idt(IDT_ptr);
 }
+//moving the blinking line in the kernel
+void move_cursor(void){
+
+}
 
 void kb_init(void){
+	//enables only keyboard
 	write_port(0x21, 0xFD);
 }
 
@@ -98,8 +99,14 @@ void keyboard_handler_main(void){
 		if(keycode < 0){
 			return;
 		}
-		vram[current_loc++] = keyboard_map[keycode];
-		vram[current_loc++] = 0x07;
+		if(keycode == 28){//if keyboard enter
+			newCommand();
+		} else{
+			vram[current_loc++] = keyboard_map[keycode];
+			vram[current_loc++] = 0x07;
+			vram[current_loc+1] = keyboard_map[0];
+		}
+
 	}
 
 }
@@ -107,39 +114,12 @@ void keyboard_handler_main(void){
 
 
 void kmain(void){
-
-	const char *openingMessage = "Soteria has booted. Try typing!";
-
+	const char *openingMessage = "OS has booted. Try typing! v2";
 	unsigned int i = 0, j = 0;
 
-	/*
-	* Loop clears the screen. There exists 25 lines of 80 columns, and each element
-	* takes 2 bytes.
-	*/
-	while(j < 80 * 25 * 2){
-		//Print blank character
-		vram[j] = ' ';
-		//Highlight next character a light gray
-		vram[j+1]= 0x07;
-		j = j + 2;
-	}
-
-	j = 0;
-
-	/*
-	* Writing the string to VRAM.
-	*/
-	while(openingMessage[j] != '\0'){
-		/* Printing the sting */
-		vram[i] = openingMessage[j];
-		/* Declaring font color, black bg, light grey fg */
-		vram[i+1] = 0x07;
-		++j;
-		i = i + 2;
-	}
-	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
-	current_loc = current_loc + (line_size - current_loc % (line_size));
-	current_loc = current_loc + (line_size - current_loc % (line_size));
+	newlineX1();
+	message(openingMessage);
+	newCommand();
 
 	IDT_init();
 	kb_init();
@@ -147,4 +127,10 @@ void kmain(void){
 
 	while(1);
 
+}
+
+void soteria(void){
+	const char *openingMessage = "Soteria has booted.";
+	clearScreen();
+	message(openingMessage);
 }

@@ -1,18 +1,32 @@
-CC=gcc
-CFLAGS=-c
-LDFLAGS=
-SOURCES=main.c
-OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=main
+CC = gcc
+LD = gcc
+NASM = nasm
 
-all: $(SOURCES) $(EXECUTABLE)
-    
-$(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+CFLAGS = -m32 -c -o kc.o
+LFLAGS = -m32 -elf_i386 -T link.ld
+NASMFLAGS = -f elf32 -o kasm.o
 
-.c.o:
-	$(CC) $(CFLAGS) $< -o $@
+PROG = kernel
 
+OBJS = kasm.o $(PROG).o kc.o
+
+
+default: $(PROG)
+
+$(PROG): $(OBJS)
+		$(LD) $(LFLAGS) $(OBJS)  -o $(PROG)
+
+kasm.o: link.ld
+		$(NASM) $(NASMFLAGS) kernel.asm
+
+$(PROG).o: $(PROG).asm
+		$(NASM) $(NASMFLAGS) $(PROG).asm
+
+kc.o: kernel.c
+		$(CC) $(CFLAGS) kernel.c
 
 clean:
-	rm *o main
+		rm -rf *.o *~
+
+real_clean:
+		rm -rf *.o $(PROG) *~
