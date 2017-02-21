@@ -20,12 +20,12 @@ void decodeInstruction(void){
 }
 
 void newCommand(void){
-	decodeInstruction();
+	//decodeInstruction();
 	char* pwd = "Soteria@CAMEL:/$ ";
-	message(userInput);
+	//message(userInput);
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
 	current_loc = current_loc + (line_size - current_loc % (line_size));
-	message("");
+	message(pwd);
 }
 
 void clearScreen(void){
@@ -51,14 +51,14 @@ void clearScreen(void){
 */
 void message(char* message){
 	unsigned int j = 0;
-	char* pwd = "Soteria@CAMEL:/$ ";
-	char* msg=strcat(pwd, message);
+	//char* pwd = "Soteria@CAMEL:/$ ";
+	//char* msg=strcat(pwd, message);
 	/*
 	* Writing the string to VRAM.
 	*/
-	while(msg[j] != '\0'){
+	while(message[j] != '\0'){
 		/* Printing the sting */
-		vram[current_loc] = msg[j];
+		vram[current_loc] = message[j];
 		/* Declaring font color, black bg, light grey fg */
 		vram[current_loc+1] = 0x07;
 		++j;
