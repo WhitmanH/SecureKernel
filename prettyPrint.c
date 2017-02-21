@@ -1,4 +1,5 @@
 #include "system.h"
+#include "my_stdlib.h"
 
 extern char* vram;
 extern unsigned int current_loc;
@@ -25,7 +26,7 @@ void newCommand(void){
 	message(userInput);
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
 	current_loc = current_loc + (line_size - current_loc % (line_size));
-	message(pwd);
+	message("");
 }
 
 void clearScreen(void){
@@ -44,18 +45,21 @@ void clearScreen(void){
 	current_loc = 0;
 }
 
+
 /*@brief Takes a pointer to a character and will print the full message. No newlines are created.
 * @param message pointer to first index of string to print.
 * @return void.
 */
 void message(char* message){
 	unsigned int j = 0;
+	char* pwd = "Soteria@CAMEL:/$ ";
+	char* msg=strcat(pwd, message);
 	/*
 	* Writing the string to VRAM.
 	*/
-	while(message[j] != '\0'){
+	while(msg[j] != '\0'){
 		/* Printing the sting */
-		vram[current_loc] = message[j];
+		vram[current_loc] = msg[j];
 		/* Declaring font color, black bg, light grey fg */
 		vram[current_loc+1] = 0x07;
 		++j;

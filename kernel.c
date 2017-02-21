@@ -102,7 +102,8 @@ void keyboard_handler_main(void){
 			return;
 		}
 		if(keycode == 28){//if keyboard enter
-			newCommand();
+			newlineX1();
+			message("");
 		} else{
 			userInput[numbKeys++] = keyboard_map[keycode];
 			vram[current_loc++] = keyboard_map[keycode];
