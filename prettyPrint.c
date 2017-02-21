@@ -44,6 +44,10 @@ void clearScreen(void){
 	current_loc = 0;
 }
 
+/*@brief Takes a pointer to a character and will print the full message. No newlines are created.
+* @param message pointer to first index of string to print.
+* @return void.
+*/
 void message(char* message){
 	unsigned int j = 0;
 	/*
