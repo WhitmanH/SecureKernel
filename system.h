@@ -28,5 +28,9 @@ extern void newCommand(void);
 extern void clearScreen(void);
 extern void message(char* message);
 
+/*SOT_STDLIB.C*/
+extern char* strcat(char*, char*);
+extern int my_strcmp(char*, char*);
+
 
 #endif
