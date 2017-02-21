@@ -18,6 +18,8 @@ extern void load_idt(unsigned long *IDT_ptr);
 */
 char *vram = (char*)0xb8000; 
 unsigned int current_loc = 0;
+char userInput[128];
+int numbKeys = 0;
 
 
 /*
@@ -102,6 +104,7 @@ void keyboard_handler_main(void){
 		if(keycode == 28){//if keyboard enter
 			newCommand();
 		} else{
+			userInput[numbKeys++] = keyboard_map[keycode];
 			vram[current_loc++] = keyboard_map[keycode];
 			vram[current_loc++] = 0x07;
 			vram[current_loc+1] = keyboard_map[0];
@@ -114,7 +117,7 @@ void keyboard_handler_main(void){
 
 
 void kmain(void){
-	const char *openingMessage = "OS has booted. Try typing! v2";
+	char *openingMessage = "OS has booted. Try typing! v2";
 	unsigned int i = 0, j = 0;
 
 	newlineX1();
@@ -130,7 +133,9 @@ void kmain(void){
 }
 
 void soteria(void){
-	const char *openingMessage = "Soteria has booted.";
+	char *openingMessage = "Soteria has booted.";
 	clearScreen();
 	message(openingMessage);
+	//mem_init();
+	//auth_init();
 }
