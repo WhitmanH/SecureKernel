@@ -2,6 +2,7 @@
 
 extern char* vram;
 extern unsigned int current_loc;
+extern char userInput[128];
 
 void newlineX2(void){
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
@@ -14,8 +15,14 @@ void newlineX1(void){
 	current_loc = current_loc + (line_size - current_loc % (line_size));
 }
 
+void decodeInstruction(void){
+	clearScreen();
+}
+
 void newCommand(void){
-	const char* pwd = "Soteria@CAMEL:/$ ";
+	decodeInstruction();
+	char* pwd = "Soteria@CAMEL:/$ ";
+	message(userInput);
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
 	current_loc = current_loc + (line_size - current_loc % (line_size));
 	message(pwd);
@@ -37,7 +44,7 @@ void clearScreen(void){
 	current_loc = 0;
 }
 
-void message(const char* message){
+void message(char* message){
 	unsigned int j = 0;
 	/*
 	* Writing the string to VRAM.

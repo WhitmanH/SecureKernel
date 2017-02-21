@@ -26,7 +26,7 @@ extern void newlineX2(void);
 extern void newlineX1(void);
 extern void newCommand(void);
 extern void clearScreen(void);
-extern void message(const char* message);
+extern void message(char* message);
 
 
 #endif
