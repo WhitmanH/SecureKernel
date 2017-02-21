@@ -2,8 +2,8 @@ cd /mnt/c/Users/Haley/Dropbox/CIS\ 433/SecureKernel
 
 nasm -f elf32 kernel.asm -o kasm.o
 
-gcc -m32 -c -fno-builtin kernel.c memory.c prettyPrint.c
+gcc -m32 -c -fno-builtin kernel.c memory.c prettyPrint.c my_stdlib.c
 
-ld -m elf_i386 -T link.ld -o kernel kasm.o kernel.o memory.o prettyPrint.o
+ld -m elf_i386 -T link.ld -o kernel kasm.o kernel.o memory.o prettyPrint.o my_stdlib.o
 
 qemu-system-i386 -curses -kernel kernel
