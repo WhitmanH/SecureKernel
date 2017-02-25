@@ -1,4 +1,4 @@
-
+#include "system.h"
 
 /*@brief Takes a pointer to 2 strings, returns a pointer to a new string that is the concatenation of the 2 input strings.
 * @param s1 pointer to the first index of the first string.
@@ -19,6 +19,17 @@ char* strcat(char* s1, char* s2){
 	return result;
 }
 
+/*@brief Takes a pointer to a string, and will count the number of characters in the string. 
+* @param s1 A pointer to the first index of the string
+* @return An integer, the length of the provided string.
+*/
+int strlens(char *s1){
+    int i, len = 0;
+    for (i=0; s1[i] != 0; i++){
+        len++;
+    }
+    return(len);
+}
 
 /*@brief Takes a pointer to 2 strings, returns a integer value 0 if the 2 strings are the same other wise a nonzero number.  
 * @param s1 A pointer to the first index of the first string to be compared.

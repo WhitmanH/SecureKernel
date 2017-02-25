@@ -100,14 +100,21 @@ void keyboard_handler_main(void){
 		keycode = read_port(KEYBOARD_DATA_PORT);
 		if(keycode < 0){
 			return;
-		}
-		if(keycode == 28){//if keyboard enter
+		}else if(keycode == 28){//if keyboard enter
 			newCommand();
+			numbKeys = 0;
+			memset(userInput, 0, 128);
+		}else if(keycode == 14){//backspace
+			userInput[--numbKeys] = '\0';
+			vram[--current_loc] = 0x00;
+			vram[--current_loc] = ' ';
+			//vram[--current_loc] = 0x0;
+			vram[current_loc] = keyboard_map[0];
 		} else{
 			userInput[numbKeys++] = keyboard_map[keycode];
 			vram[current_loc++] = keyboard_map[keycode];
 			vram[current_loc++] = 0x07;
-			vram[current_loc+1] = keyboard_map[0];
+			vram[current_loc] = keyboard_map[0];
 		}
 
 	}
@@ -134,7 +141,7 @@ void kmain(void){
 
 void soteria(void){
 	char *openingMessage = "Soteria has booted.";
-	clearScreen();
+	clear();
 	message(openingMessage);
 	//mem_init();
 	//auth_init();

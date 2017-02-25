@@ -16,32 +16,30 @@ void newlineX1(void){
 }
 
 void decodeInstruction(void){
-	clearScreen();
+	int id = commandLookup(userInput);
+	switch(id){
+		case 0 :
+			break;
+		case 1 :
+			help();
+			break;
+		case 2 : 
+			clear();
+			break;	
+		default :
+			newlineX1();
+			message(userInput); message(" is not a selected command. Type -help for more information.");	
+	}
 }
 
 void newCommand(void){
 	//decodeInstruction();
 	char* pwd = "Soteria@CAMEL:/$ ";
+	decodeInstruction();
 	//message(userInput);
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
 	current_loc = current_loc + (line_size - current_loc % (line_size));
 	message(pwd);
-}
-
-void clearScreen(void){
-	unsigned int i = 0, j = 0;
-	/*
-	* Loop clears the screen. There exists 25 lines of 80 columns, and each element
-	* takes 2 bytes.
-	*/
-	while(j < 80 * 25 * 2){
-		//Print blank character
-		vram[j] = ' ';
-		//Highlight next character a light gray
-		vram[j+1]= 0x07;
-		j = j + 2;
-	}
-	current_loc = 0;
 }
 
 
