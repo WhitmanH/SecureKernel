@@ -27,18 +27,17 @@ void decodeInstruction(void){
 			clear();
 			break;	
 		default :
-			newlineX1();
-			message(userInput); message(" is not a selected command. Type -help for more information.");	
+			message(userInput); message(" is not a selected command. Type -help for more information.");
+			newlineX1();	
 	}
 }
 
 void newCommand(void){
 	//decodeInstruction();
 	char* pwd = "Soteria@CAMEL:/$ ";
+	newlineX1();
 	decodeInstruction();
 	//message(userInput);
-	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
-	current_loc = current_loc + (line_size - current_loc % (line_size));
 	message(pwd);
 }
 
@@ -58,6 +57,17 @@ void message(char* message){
 		/* Printing the sting */
 		vram[current_loc] = message[j];
 		/* Declaring font color, black bg, light grey fg */
+		vram[current_loc+1] = 0x07;
+		++j;
+		current_loc = current_loc + 2;
+	}
+}
+
+void openingScreen(){
+	const char soteriaScreen[] = {'S', 'O', 'T', 'E', 'R', 'I', 'A'};
+	unsigned int j = 0;
+	while(soteriaScreen != '\0'){
+		vram[current_loc] = soteriaScreen[j];
 		vram[current_loc+1] = 0x07;
 		++j;
 		current_loc = current_loc + 2;

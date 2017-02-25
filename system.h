@@ -22,12 +22,13 @@ extern void *memset(void *dest, char val, unsigned short count);
 extern unsigned short *memsetw(unsigned short *dest, unsigned short val, unsigned short count);
 extern unsigned short strlen(const char *str);
 
-/*PRINTYPRINT.C*/
+/*output.C*/
 extern void newlineX2(void);
 extern void newlineX1(void);
 extern void newCommand(void);
 extern void clear(void);
 extern void message(char* message);
+extern void openingScreen();
 
 /*SOT_STDLIB.C*/
 extern char* strcat(char*, char*);

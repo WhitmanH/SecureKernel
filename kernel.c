@@ -131,6 +131,7 @@ void kmain(void){
 	message(openingMessage);
 	newCommand();
 
+
 	IDT_init();
 	kb_init();
 
