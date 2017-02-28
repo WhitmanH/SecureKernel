@@ -12,6 +12,11 @@ global write_port
 global load_idt
 global keyboard_handler
 
+;Memory
+global read_cr0
+global write_cr0
+global read_cr3
+global write_cr3
 
 extern kmain ;;Found in kernel.c
 extern soteria
@@ -58,6 +63,32 @@ load_idt: ; Loading the Interrupt Descripter Table (IDT), to handle keyboard int
 keyboard_handler: ; for all currently implemented interrupts
 	call keyboard_handler_main
 	iretd
+
+;;MEMORY MANAGEMENT CR0 and CR3 Registers
+;CR0, 32bits, controls protections
+read_cr0:
+	mov eax, cr0
+	ret
+
+write_cr0:
+	push ebp
+	mov ebp, esp
+	mov eax, [ebp+8]
+	mov cr0, eax
+	pop ebp
+	ret
+;CR3, 32bits, the physical base address of the memory.	
+read_cr3:
+	mov eax, cr3
+	ret
+
+write_cr3:
+	push ebp
+	mov ebp, esp
+	mov eax, [ebp+8]
+	mov cr3, eax
+	pop ebp
+	ret
 
 section .bss
 resb 8192 ;Specifying 8kb for the kernel's stack

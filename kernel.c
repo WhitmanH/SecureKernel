@@ -116,9 +116,7 @@ void keyboard_handler_main(void){
 			vram[current_loc++] = 0x07;
 			vram[current_loc] = keyboard_map[0];
 		}
-
 	}
-
 }
 
 
@@ -134,6 +132,7 @@ void kmain(void){
 
 	IDT_init();
 	kb_init();
+	paging_init(); //without this, we only have access to 16mb of memory by default on x86 system.
 
 
 	while(1);
