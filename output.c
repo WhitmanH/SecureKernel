@@ -62,6 +62,10 @@ void message(char* message){
 		current_loc = current_loc + 2;
 	}
 }
+//test later delete
+void testPrintScreen(void){
+	
+}
 
 void openingScreen(){
 	const char soteriaScreen[] = {'S', 'O', 'T', 'E', 'R', 'I', 'A'};

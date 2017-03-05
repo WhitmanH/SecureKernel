@@ -10,7 +10,8 @@ struct systemCalls{
 	char call[64];
 };
 
-struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "fuck"}};
+struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "echo"}, {4, "ls"}, {5, "read"}, {6, "edit"},
+														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}};
 
 int commandLookup(char* call){
 	int i;
@@ -39,6 +40,7 @@ void clear(void){
 	current_loc = 0;
 }
 
+
 void help(void){
 	newlineX2();
 	message("Currently Available System Calls:");
@@ -51,4 +53,6 @@ void help(void){
 		
 	}
 	newlineX1();
+	message("For help on a specific system call type -help <system call>.");
+	newlineX2();
 }
