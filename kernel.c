@@ -122,13 +122,13 @@ void keyboard_handler_main(void){
 
 
 void kmain(void){
-	char *openingMessage = "OS has booted. Try typing! v2";
+	char *openingMessage = "OS Kernel has booted.";
 	unsigned int i = 0, j = 0;
 
 	newlineX1();
 	message(openingMessage);
-	newCommand();
-
+	newlineX2();
+	message("Soteria@CAMEL:/$ ");
 
 	IDT_init();
 	kb_init();
