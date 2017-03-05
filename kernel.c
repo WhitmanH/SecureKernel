@@ -12,6 +12,7 @@ extern void keyboard_handler(void);
 extern char read_port(unsigned short port);
 extern void write_port(unsigned short port, unsigned char data);
 extern void load_idt(unsigned long *IDT_ptr);
+typedef void (*call_module_t)(void);
 
 /*
 * Global Variables
@@ -121,18 +122,30 @@ void keyboard_handler_main(void){
 
 
 
-void kmain(void){
+
+void kmain(unsigned int ebx){
+	
+	multiboot_info_t *mbinfo = (multiboot_info_t *) ebx;
+	unsigned int address_of_module = mbinfo->mods_addr;
 	char *openingMessage = "OS Kernel has booted.";
+
 	unsigned int i = 0, j = 0;
 
 	newlineX1();
 	message(openingMessage);
+
 	newlineX2();
 	message("Soteria@CAMEL:/$ ");
 
+
 	IDT_init();
 	kb_init();
-	paging_init(); //without this, we only have access to 16mb of memory by default on x86 system.
+	/* ... */
+	
+	//paging_init(); //without this, we only have access to 16mb of memory by default on x86 system.
+	//call_module_t start_program = (call_module_t) address_of_module;
+	//start_program();
+	/* we’ll never get here, unless the module code returns */
 
 
 	while(1);

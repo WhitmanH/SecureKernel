@@ -5,10 +5,22 @@
 
 OUTPUT_FORMAT(elf32-i386)
 ENTRY(entry)
+
+
 SECTIONS
 {
-	. = 0x100000;
-	.text : {*(.text)}
-	.data : {*(.data)}
-	.bss : {*(.bss)}
+	. = 0xC0100000;
+
+	.text :AT(ADDR(.text) - 0xC0000000){
+	 	*(.text)
+	 }
+	.data :
+	 {
+	 	*(.data)
+	 }
+	.bss : AT(ADDR(.bss) - 0xC0000000)
+	{	
+		*(COMMON)
+		*(.bss)
+	}
 }

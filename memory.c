@@ -39,7 +39,7 @@ unsigned short strlen(const char *str)
 
 /*
 *Init code function dervied from http://www.osdever.net/tutorials/view/implementing-basic-paging
-*/
+
 void paging_init(void){
     unsigned long *pageDirectory = (unsigned long *) 0x9C000;
     unsigned long *pageTable = (unsigned long *) 0x9D000; // Init page table (after page directory)
@@ -64,3 +64,5 @@ void paging_init(void){
 
 
 }
+
+*/
