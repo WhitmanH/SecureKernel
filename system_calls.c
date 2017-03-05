@@ -4,6 +4,7 @@
 * @param call String of system call
 * @return int Of corresponding call's opcode.
 */
+int currentDirectory;
 
 struct systemCalls{
 	int id;
@@ -55,4 +56,19 @@ void help(void){
 	newlineX1();
 	message("For help on a specific system call type -help <system call>.");
 	newlineX2();
+}
+
+void ls(void){
+	int i;
+	for(i=0; i < totalFiles; i++){
+		if(fileSystem[i].level == currentDirectory){
+			message(fileSystem[i].name);
+			message(" ");
+		}
+	}
+	newlineX1();
+}
+
+void cd(void){
+	currentDirectory++;
 }

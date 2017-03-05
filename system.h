@@ -23,6 +23,19 @@
 
 extern char *vram;
 extern unsigned int current_loc;
+extern int currentDirectory;
+
+
+/*FILESYSTEM.C*/
+typedef struct
+{
+    char name[20];
+    char path[50];
+    int level;
+}File;
+extern int totalFiles;
+
+extern File fileSystem[100];
 
 /*MEMORY.C*/
 extern void *memcpy(void *dest, const void *src, unsigned short count);
@@ -43,6 +56,7 @@ extern void openingScreen();
 extern char* strcat(char*, char*);
 extern int my_strcmp(char*, char*);
 extern int strlens(char*);
+extern void strcpy(char dest[], const char source[]);
 
 /*SYSTEM_CALLS.C*/
 extern int commandLookup(char* call);

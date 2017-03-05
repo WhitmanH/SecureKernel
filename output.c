@@ -26,6 +26,12 @@ void decodeInstruction(void){
 		case 2 : 
 			clear();
 			break;	
+		case 4 :
+			ls();
+			break;	
+		case 9 :
+			cd();
+			break;		
 		default :
 			message(userInput); message(" is not a selected command. Type -help for more information.");
 			newlineX1();	

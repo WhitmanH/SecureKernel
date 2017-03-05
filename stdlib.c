@@ -41,3 +41,10 @@ int strcmp(char *s1, char *s2)
     while (*s1 && *s2 && *s1 == *s2) { ++s1; ++s2; }
     return *s1 - *s2;
 }
+
+void strcpy(char dest[], const char source[]) {
+    int i = 0;
+    while ((dest[i] = source[i]) != '\0') {
+    i++;
+    }
+}

@@ -140,6 +140,7 @@ void kmain(unsigned int ebx){
 
 	IDT_init();
 	kb_init();
+	FILESYSTEM_init();
 	/* ... */
 	
 	//paging_init(); //without this, we only have access to 16mb of memory by default on x86 system.
