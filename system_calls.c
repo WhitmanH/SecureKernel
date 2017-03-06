@@ -6,6 +6,8 @@
 */
 int currentDirectory;
 
+
+
 struct systemCalls{
 	int id;
 	char call[64];
@@ -17,6 +19,8 @@ struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"},
 int commandLookup(char* call){
 	int i;
 	//int = strlen(sCall)
+	// char* tmp = strstrip(call);
+	// message(tmp);
 	for(i = 0; i < NUMBER_SYS_CALLS; ++i){
 		if(!strcmp(call, SYSTEM_CALLS[i].call)){
 			return SYSTEM_CALLS[i].id;
@@ -31,7 +35,7 @@ void clear(void){
 	* Loop clears the screen. There exists 25 lines of 80 columns, and each element
 	* takes 2 bytes.
 	*/
-	while(j < 80 * 25 * 2){
+	while(j < 80 * 25 * 2){ 
 		//Print blank character
 		vram[j] = ' ';
 		//Highlight next character a light gray
@@ -70,5 +74,18 @@ void ls(void){
 }
 
 void cd(void){
-	currentDirectory++;
+	int i;
+	if(!strcmp(userArg, "..")){
+		currentDirectory--;
+	} else {
+		for(i = 0; i < totalFiles; ++i){
+			if(!strcmp(userArg, fileSystem[i].name)){
+				currentDirectory++;
+			}
+		} 
+	}
+}
+
+void mkdir(void){
+	create_directory(userArg);
 }

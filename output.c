@@ -28,7 +28,10 @@ void decodeInstruction(void){
 			break;	
 		case 4 :
 			ls();
-			break;	
+			break;
+		case 7 :
+			mkdir();
+			break;		
 		case 9 :
 			cd();
 			break;		

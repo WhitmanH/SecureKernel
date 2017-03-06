@@ -26,5 +26,6 @@ void FILESYSTEM_init(void){
 }
 
 void create_directory(char* name){
+	totalFiles++;
 	strcpy(fileSystem[totalFiles++].name, name);
 }

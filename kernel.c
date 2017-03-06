@@ -14,13 +14,16 @@ extern void write_port(unsigned short port, unsigned char data);
 extern void load_idt(unsigned long *IDT_ptr);
 typedef void (*call_module_t)(void);
 
+
 /*
 * Global Variables
 */
 char *vram = (char*)0xb8000; 
 unsigned int current_loc = 0;
 char userInput[128];
+char userArg[128];
 int numbKeys = 0;
+int argFlag = 0;
 
 
 /*
@@ -104,18 +107,34 @@ void keyboard_handler_main(void){
 		}else if(keycode == 28){//if keyboard enter
 			newCommand();
 			numbKeys = 0;
+			argFlag = 0;
 			memset(userInput, 0, 128);
+			memset(userArg, 0, 128);
 		}else if(keycode == 14){//backspace
 			userInput[--numbKeys] = '\0';
 			vram[--current_loc] = 0x00;
 			vram[--current_loc] = ' ';
 			//vram[--current_loc] = 0x0;
 			vram[current_loc] = keyboard_map[0];
-		} else{
-			userInput[numbKeys++] = keyboard_map[keycode];
+		} else if(keycode == 57){ //space
 			vram[current_loc++] = keyboard_map[keycode];
 			vram[current_loc++] = 0x07;
 			vram[current_loc] = keyboard_map[0];
+			numbKeys = 0;
+			argFlag++;
+		} else{
+			if(argFlag == 0){
+				userInput[numbKeys++] = keyboard_map[keycode];
+				vram[current_loc++] = keyboard_map[keycode];
+				vram[current_loc++] = 0x07;
+				vram[current_loc] = keyboard_map[0];
+			} else if(argFlag == 1){
+				userArg[numbKeys++] = keyboard_map[keycode];
+				vram[current_loc++] = keyboard_map[keycode];
+				vram[current_loc++] = 0x07;
+				vram[current_loc] = keyboard_map[0];
+			}
+
 		}
 	}
 }

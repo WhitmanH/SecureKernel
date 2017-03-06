@@ -24,6 +24,8 @@
 extern char *vram;
 extern unsigned int current_loc;
 extern int currentDirectory;
+extern char userInput[128];
+extern char userArg[128];
 
 
 /*FILESYSTEM.C*/
@@ -57,6 +59,7 @@ extern char* strcat(char*, char*);
 extern int my_strcmp(char*, char*);
 extern int strlens(char*);
 extern void strcpy(char dest[], const char source[]);
+extern char *strstrip(char *s);
 
 /*SYSTEM_CALLS.C*/
 extern int commandLookup(char* call);
