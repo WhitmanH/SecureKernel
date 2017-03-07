@@ -5,6 +5,9 @@
 * @return int Of corresponding call's opcode.
 */
 int currentDirectory;
+char userArg[128];
+char userArg2[128];
+
 
 
 
@@ -14,7 +17,7 @@ struct systemCalls{
 };
 
 struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "echo"}, {4, "ls"}, {5, "read"}, {6, "edit"},
-														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}};
+														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}};
 
 int commandLookup(char* call){
 	int i;
@@ -55,7 +58,6 @@ void help(void){
 		if(strcmp("\0", SYSTEM_CALLS[i].call)){
 			message(SYSTEM_CALLS[i].call); message(", ");
 		}
-		
 	}
 	newlineX1();
 	message("For help on a specific system call type -help <system call>.");
@@ -65,8 +67,11 @@ void help(void){
 void ls(void){
 	int i;
 	for(i=0; i < totalFiles; i++){
-		if(fileSystem[i].level == currentDirectory){
 			message(fileSystem[i].name);
+			message(" ");
+	}for(i=0; i < cur_file; i++){
+		if(files[i].level == currentDirectory){
+			message(files[i].name);
 			message(" ");
 		}
 	}
@@ -75,17 +80,45 @@ void ls(void){
 
 void cd(void){
 	int i;
-	if(!strcmp(userArg, "..")){
+	if((!strcmp(userArg, "..")) && (currentDirectory > 0)){
 		currentDirectory--;
+		fileSystem=(File*)fileSystem[0].parent;
 	} else {
 		for(i = 0; i < totalFiles; ++i){
 			if(!strcmp(userArg, fileSystem[i].name)){
 				currentDirectory++;
+				fileSystem=(File*)fileSystem[i].children;
 			}
 		} 
 	}
 }
 
 void mkdir(void){
-	create_directory(userArg);
+	//create_directory(userArg);
+	message(userArg);
+}
+
+void echo(void){
+	if(write_flag){
+		message(userArg3);
+		create_file(userArg3, userArg);
+		newlineX2();
+	}else{
+		message(strcat(userArg, userArg2));
+		newlineX2();
+	}
+}
+
+void cat(void){
+	int i=0;
+	for(i=0; i < cur_file; i++){
+		if(!strcmp(userArg, files[i].name)) {
+			message(files[i].desc);
+			newlineX2();
+		}else{
+			 message("File does not exist");
+			 newlineX2();
+		}
+	}
+
 }

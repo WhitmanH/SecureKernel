@@ -3,6 +3,7 @@
 extern char* vram;
 extern unsigned int current_loc;
 extern char userInput[128];
+extern char* pwd;
 
 void newlineX2(void){
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;
@@ -25,16 +26,22 @@ void decodeInstruction(void){
 			break;
 		case 2 : 
 			clear();
-			break;	
+			break;
+		case 3 : 
+			echo();
+			break;		
 		case 4 :
 			ls();
 			break;
 		case 7 :
-			mkdir();
+			echo();
 			break;		
 		case 9 :
 			cd();
-			break;		
+			break;
+		case 11:
+			cat();	
+			break;
 		default :
 			message(userInput); message(" is not a selected command. Type -help for more information.");
 			newlineX1();	

@@ -10,11 +10,12 @@
 #define COLUMNS_IN_LINE 80
 #define LINES 25
 #define BYTES_FOR_EACH_ELEMENT 2
-#define NUMBER_SYS_CALLS 10
+#define NUMBER_SYS_CALLS 11
 
 #define MULTIBOOT_HEADER_MAGIC 0x1BADB002
 #define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002
 #define STACK_SIZE 0x4000
+#define NULL ( (void *) 0)
 
 /*
 * Memory sizes
@@ -26,6 +27,12 @@ extern unsigned int current_loc;
 extern int currentDirectory;
 extern char userInput[128];
 extern char userArg[128];
+extern char userArg2[128];
+extern char userArg3[128];
+extern char userArg4[128];
+extern int write_flag;
+extern int cur_file;
+
 
 
 /*FILESYSTEM.C*/
@@ -33,11 +40,31 @@ typedef struct
 {
     char name[20];
     char path[50];
+    char desc[128];
     int level;
+    struct File* parent;
+    struct File* children;
 }File;
-extern int totalFiles;
 
-extern File fileSystem[100];
+
+
+extern int totalFiles;
+extern char* pwd;
+
+
+/*Pointer to current File system array */
+extern File* fileSystem;
+
+
+/*File system arrays*/
+extern File lvl[1];
+extern File lvl0[1];
+extern File lvl1[6];
+extern File lvl_home[10];
+extern File lvl_usr[10];
+extern File lvl_lib[10];
+extern File lvl_mnt[5];
+extern File files[25];
 
 /*MEMORY.C*/
 extern void *memcpy(void *dest, const void *src, unsigned short count);
@@ -53,6 +80,7 @@ extern void newCommand(void);
 extern void clear(void);
 extern void message(char* message);
 extern void openingScreen();
+
 
 /*SOT_STDLIB.C*/
 extern char* strcat(char*, char*);

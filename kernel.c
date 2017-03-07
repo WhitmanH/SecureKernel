@@ -22,8 +22,13 @@ char *vram = (char*)0xb8000;
 unsigned int current_loc = 0;
 char userInput[128];
 char userArg[128];
+char userArg2[128];
+char userArg3[128];
+char userArg4[128];
 int numbKeys = 0;
 int argFlag = 0;
+int echo_flag=0;
+int write_flag=0;
 
 
 /*
@@ -108,28 +113,59 @@ void keyboard_handler_main(void){
 			newCommand();
 			numbKeys = 0;
 			argFlag = 0;
+			echo_flag = 0;
+			write_flag=0;
 			memset(userInput, 0, 128);
 			memset(userArg, 0, 128);
+			memset(userArg2, 0, 128);
+			memset(userArg3, 0, 128);
+			memset(userArg4, 0, 128);
 		}else if(keycode == 14){//backspace
 			userInput[--numbKeys] = '\0';
 			vram[--current_loc] = 0x00;
 			vram[--current_loc] = ' ';
 			//vram[--current_loc] = 0x0;
 			vram[current_loc] = keyboard_map[0];
-		} else if(keycode == 57){ //space
+		} else if(keycode == 57 && !echo_flag){ //space
 			vram[current_loc++] = keyboard_map[keycode];
 			vram[current_loc++] = 0x07;
 			vram[current_loc] = keyboard_map[0];
 			numbKeys = 0;
 			argFlag++;
-		} else{
-			if(argFlag == 0){
+		}else{
+
+			if(keycode == 41){
+				echo_flag = !echo_flag;
+			}if(argFlag == 0){
 				userInput[numbKeys++] = keyboard_map[keycode];
 				vram[current_loc++] = keyboard_map[keycode];
 				vram[current_loc++] = 0x07;
 				vram[current_loc] = keyboard_map[0];
 			} else if(argFlag == 1){
 				userArg[numbKeys++] = keyboard_map[keycode];
+				vram[current_loc++] = keyboard_map[keycode];
+				vram[current_loc++] = 0x07;
+				vram[current_loc] = keyboard_map[0];
+			}else if(argFlag == 2){
+				if(keycode == 77){
+					userArg2[numbKeys++] = keyboard_map[keycode];
+					vram[current_loc++] = keyboard_map[keycode];
+					vram[current_loc++] = 0x07;
+					vram[current_loc] = keyboard_map[0];
+					write_flag=1;
+				}else{
+					userArg2[numbKeys++] = keyboard_map[keycode];
+					vram[current_loc++] = keyboard_map[keycode];
+					vram[current_loc++] = 0x07;
+					vram[current_loc] = keyboard_map[0];
+				}
+			}else if(argFlag == 3){
+				userArg3[numbKeys++] = keyboard_map[keycode];
+				vram[current_loc++] = keyboard_map[keycode];
+				vram[current_loc++] = 0x07;
+				vram[current_loc] = keyboard_map[0];
+			}else{
+				userArg4[numbKeys++] = keyboard_map[keycode];
 				vram[current_loc++] = keyboard_map[keycode];
 				vram[current_loc++] = 0x07;
 				vram[current_loc] = keyboard_map[0];
