@@ -190,7 +190,7 @@ void kmain(unsigned int ebx){
 	message(openingMessage);
 
 	newlineX2();
-	message("Soteria@CAMEL:/$ ");
+	message("Soteria@CAMEL:$ ");
 
 
 	IDT_init();

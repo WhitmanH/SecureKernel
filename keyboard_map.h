@@ -25,7 +25,7 @@ unsigned char keyboard_map[128] =
     0,	/* 69 - Num lock*/
     0,	/* Scroll Lock */
     0,	/* Home key */
-    0,	/* Up Arrow */
+    '$',	/* Up Arrow */
     0,	/* Page Up */
   '-',
    '<',	/* Left Arrow */
@@ -33,7 +33,7 @@ unsigned char keyboard_map[128] =
   '>',	/* Right Arrow */
   '+',
     0,	/* 79 - End key*/
-    0,	/* Down Arrow */
+    ':',	/* Down Arrow */
     0,	/* Page Down */
     0,	/* Insert Key */
     0,	/* Delete Key */

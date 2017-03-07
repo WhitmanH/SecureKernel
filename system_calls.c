@@ -86,8 +86,13 @@ void cd(void){
 	} else {
 		for(i = 0; i < totalFiles; ++i){
 			if(!strcmp(userArg, fileSystem[i].name)){
+				if(fileSystem[i].privilege==0){
+					message("You do not have the permissions to access \"sys\" file");
+					newlineX1();
+				}else{
 				currentDirectory++;
 				fileSystem=(File*)fileSystem[i].children;
+				}
 			}
 		} 
 	}
@@ -100,12 +105,12 @@ void mkdir(void){
 
 void echo(void){
 	if(write_flag){
-		message(userArg3);
+		//message(userArg3);
 		create_file(userArg3, userArg);
-		newlineX2();
+		newlineX1();
 	}else{
 		message(strcat(userArg, userArg2));
-		newlineX2();
+		newlineX1();
 	}
 }
 
@@ -114,10 +119,10 @@ void cat(void){
 	for(i=0; i < cur_file; i++){
 		if(!strcmp(userArg, files[i].name)) {
 			message(files[i].desc);
-			newlineX2();
+			newlineX1();
 		}else{
 			 message("File does not exist");
-			 newlineX2();
+			 newlineX1();
 		}
 	}
 

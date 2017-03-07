@@ -44,6 +44,8 @@ typedef struct
     int level;
     struct File* parent;
     struct File* children;
+    int privilege;
+    int folder;
 }File;
 
 
@@ -60,11 +62,13 @@ extern File* fileSystem;
 extern File lvl[1];
 extern File lvl0[1];
 extern File lvl1[6];
-extern File lvl_home[10];
-extern File lvl_usr[10];
-extern File lvl_lib[10];
+extern File lvl_home[5];
+extern File lvl_usr[5];
+extern File lvl_lib[5];
 extern File lvl_mnt[5];
-extern File files[25];
+extern File lvl_tmp[5];
+extern File lvl_sys[5];
+extern File files[5];
 
 /*MEMORY.C*/
 extern void *memcpy(void *dest, const void *src, unsigned short count);

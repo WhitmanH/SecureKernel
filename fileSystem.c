@@ -16,15 +16,20 @@ File lvl0[1];
 /*Directory for level 1, usr, home, lib, mount, sys, tmp*/
 File lvl1[6];
 /*Directories in home file*/
-File lvl_home[10];
-/*Directories in usr file*/
-File lvl_usr[10];
-/*Directories in lib file*/
-File lvl_lib[10];
+File lvl_home[5];
 /*Directories in mnt file*/
 File lvl_mnt[5];
 
-File files[25];
+/*Directories in usr file*/
+File lvl_usr[5];
+/*Directories in lib file*/
+File lvl_lib[5];
+/*Directories in tmp file*/
+File lvl_tmp[5];
+/*Directories in sys file*/
+File lvl_sys[5];
+/*stores user created files*/
+File files[5];
 
 
 
@@ -33,15 +38,18 @@ File files[25];
 void FILESYSTEM_init(void){
 	int i;
 	currentDirectory = 0;
-	File root = {"root", "","",0, NULL, (struct File*)lvl1};
-	File usr = {"usr", "usr","", 1, (struct File*)lvl, (struct File*)lvl_home};
-	File home = {"home", "home", "", 1, (struct File*)lvl, (struct File*)lvl_home};
-	File lib = {"lib", "lib", "", 1, (struct File*)lvl, (struct File*)lvl_home};
-	File mnt = {"mnt", "mnt","", 1, (struct File*)lvl, (struct File*)lvl_mnt};
-	File sys = {"sys", "sys", "", 1, (struct File*)lvl, (struct File*)lvl_home};
-	File tmp = {"tmp", "tmp", "", 1, (struct File*)lvl, NULL};
-	File user = {"user", "home/user", "", 2, (struct File*)lvl1, NULL};
-	File c_drive = {"c", "mnt/c", "", 2, (struct File*)lvl1, NULL};
+	File root = {"root", "","",0, NULL, (struct File*)lvl1, 3, 1};
+	File usr = {"usr", "usr","", 1, (struct File*)lvl, (struct File*)lvl_usr, 3, 1};
+	File home = {"home", "home", "", 1, (struct File*)lvl, (struct File*)lvl_home, 3, 1};
+	File lib = {"lib", "lib", "", 1, (struct File*)lvl, (struct File*)lvl_lib, 3, 1};
+	File mnt = {"mnt", "mnt","", 1, (struct File*)lvl, (struct File*)lvl_mnt, 3, 1};
+	File sys = {"sys", "sys", "", 1, (struct File*)lvl, (struct File*)lvl_sys, 0, 1};
+	File tmp = {"tmp", "tmp", "", 1, (struct File*)lvl, (struct File*)lvl_tmp, 3, 1};
+
+	File user = {"user", "home/user", "", 2, (struct File*)lvl1, NULL, 3, 1};
+	File c_drive = {"c", "mnt/c", "", 2, (struct File*)lvl1, NULL, 3, 1};
+	File bin = {"bin", "usr/bin", "", 2, (struct File*)lvl1, NULL, 3, 1};
+
 
 
 	lvl[0] = root;
