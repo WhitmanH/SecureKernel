@@ -66,6 +66,7 @@ extern File lvl_home[5];
 extern File lvl_usr[5];
 extern File lvl_lib[5];
 extern File lvl_mnt[5];
+extern File lvl_tmp1[1];
 extern File lvl_tmp[5];
 extern File lvl_sys[5];
 extern File files[5];

@@ -69,11 +69,6 @@ void ls(void){
 	for(i=0; i < totalFiles; i++){
 			message(fileSystem[i].name);
 			message(" ");
-	}for(i=0; i < cur_file; i++){
-		if(files[i].level == currentDirectory){
-			message(files[i].name);
-			message(" ");
-		}
 	}
 	newlineX1();
 }
