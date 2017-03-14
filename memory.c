@@ -37,32 +37,50 @@ unsigned short strlen(const char *str)
 }
 
 
-/*
-*Init code function dervied from http://www.osdever.net/tutorials/view/implementing-basic-paging
+void populate_file_system(){
+    int i=0,j=0;
+    create_file_system_array();
+    currentDirectory = 0;
+    File root = {"root", "","",0, 0,(struct File*)FileSystem[0], 3, 1, 5};
+    File usr = {"usr", "usr","", 0, 1, (struct File*)FileSystem[1], 3, 1, 2};
+    File home = {"home", "home", "", 0,2, (struct File*)FileSystem[2], 3, 1, 1};
+    File mnt = {"mnt", "mnt","", 0,3, (struct File*)FileSystem[3], 3, 1, 1};
+    File sys = {"sys", "sys", "", 0,4, (struct File*)FileSystem[4], 0, 1, 1};
+    File tmp = {"tmp", "tmp", "", 0,5, (struct File*)FileSystem[5], 3, 1, 0};
+    File user = {"user", "home/user", "", 2 ,6, (struct File*)FileSystem[6], 3, 1, 0};
+    File c_drive = {"c", "mnt/c", "", 4,7, (struct File*)FileSystem[7], 3, 1,0};
+    File bin = {"bin", "usr/bin", "", 1,8,  (struct File*)FileSystem[8], 3, 1, 0};
+    File src = {"src", "usr/src", "", 1,9, (struct File*)FileSystem[9], 3, 1, 0};
+    File kern = {"kernel", "usr/kernelnasm", "", 2, 10, (struct File*)FileSystem[10], 3, 1, 0};
+    File andrew  ={"andrew","home/user/andrew", "", 6, 11, (struct File*)FileSystem[11], 3, 1, 0};
 
-void paging_init(void){
-    unsigned long *pageDirectory = (unsigned long *) 0x9C000;
-    unsigned long *pageTable = (unsigned long *) 0x9D000; // Init page table (after page directory)
+    FileIndex[0]= root;
+    FileIndex[1] = usr;
+    FileIndex[2] = home;
+    FileIndex[4] = sys;
+    FileIndex[3] = mnt;
+    FileIndex[5] = tmp;
+    FileIndex[6] = user;
+    FileIndex[7] = c_drive;
+    FileIndex[8] = bin;
+    FileIndex[9] = src;
+    FileIndex[11] = andrew;
 
-    unsigned long address=0;
-    unsigned int i;
 
-    for(i=0; i<Kilobyte; i++){
-        pageTable[i] = address | 3; //This gives read/write. (011) flags, and present.
-        address = address + (4 * Kilobyte);
-    }
-    //Have to set the first page into the directory before it uses it, otherwise will not work.
-    pageDirectory[0] = (unsigned) pageTable; //read/write and present
-    pageDirectory[0] = pageDirectory[0] | 3; 
+    FileSystem[0][0]=usr; 
+    FileSystem[0][1]=home; 
+    FileSystem[0][2]=sys; 
+    FileSystem[0][3]=mnt;
+    FileSystem[0][4]=tmp;
 
-    for(i = 1; i<Kilobyte; i++){
-        pageDirectory[i] = 0 | 2; //read/write and not present
-    }
+    FileSystem[1][0]=bin;
+    FileSystem[1][1]=src;
 
-    write_cr3(pageDirectory); // page directory address into cr3
-    write_cr0(read_cr0() | 0x80000000); //paging bit in cr0 to 1, enable paging
+    FileSystem[2][0]=user;
 
+    FileSystem[6][0]=andrew;
+
+
+    blank=curDirectory=prevDirectory=FileSystem[0];
 
 }
-
-*/

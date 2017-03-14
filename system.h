@@ -16,7 +16,9 @@
 #define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002
 #define STACK_SIZE 0x4000
 #define NULL ( (void *) 0)
-#define max_file_size 6
+
+#define max_file_size 10
+#define max_file_system_size 100
 
 /*
 * Memory sizes
@@ -62,8 +64,8 @@ extern File* blank;
 extern char* cur_dur_name;
 
 /*File system arrays*/
-extern File FileSystem[20][6];
-extern File FileIndex[20];
+extern File FileSystem[max_file_system_size][max_file_size];
+extern File FileIndex[max_file_system_size];
 
 
 /*MEMORY.C*/
@@ -74,6 +76,7 @@ extern unsigned short strlen(const char *str);
 extern void paging_init(void);
 extern void create_file_system_array();
 extern int find_cur_direcroty_idnes(); 
+extern void populate_file_system();
 
 /*output.C*/
 extern void newlineX2(void);
