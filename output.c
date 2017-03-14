@@ -56,7 +56,7 @@ void decodeInstruction(void){
 
 void newCommand(void){
 	//decodeInstruction();
-	char* pwd = "Soteria@CAMEL:/$ ";
+	//char* pwd = "Soteria@CAMEL:/$ ";
 	newlineX1();
 	decodeInstruction();
 	//message(userInput);

@@ -77,8 +77,10 @@ void cd(void){
 	int i;
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
 		currentDirectory=1;
-		curDirectory = prevDirectory = NullPage;
+		curDirectory = NullPage;
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
+		char* new_path=strcat(user_part_pwd, FileIndex[FileIndex[currentDirectory].parent_index].path);
+		pwd = (strcat(new_path, "$ "));
 		int next_dir = FileIndex[currentDirectory].parent_index;
 		currentDirectory=next_dir;
 		curDirectory=FileSystem[next_dir];
@@ -94,10 +96,13 @@ void cd(void){
 					message("No open for you");
 					newlineX1();
 				}else{
+				char* new_path=strcat(user_part_pwd, curDirectory[i].path);
+				pwd = (strcat(new_path, "$ "));
+				newlineX1();
 				currentDirectory = curDirectory[i].index;
 				File* temp = curDirectory;
 				curDirectory=(File*)curDirectory[i].children;
-				prevDirectory=temp;
+				
 				}
 			}
 		} 
@@ -106,12 +111,10 @@ void cd(void){
 
 void mkdir(void){
 	create_directory(userArg);
-	//message(userArg);
 }
 
 void echo(void){
 	if(write_flag){
-		//message(userArg3);
 		create_file(userArg3, userArg);
 		newlineX1();
 	}else{

@@ -52,16 +52,18 @@ typedef struct
 }File;
 
 
+/*Path variable to be printed to terminal*/
+extern char* pwd;
+
 
 extern int totalFiles;
+extern char* user_part_pwd;
 extern char* pwd;
 
 
 /*Pointer to current File system array */
 extern File* curDirectory;
-extern File* prevDirectory;
 extern File* NullPage;
-extern char* cur_dur_name;
 
 /*File system arrays*/
 extern File FileSystem[max_file_system_size][max_file_size];
@@ -85,6 +87,9 @@ extern void newCommand(void);
 extern void clear(void);
 extern void message(char* message);
 extern void openingScreen();
+
+/*fileSystem.c*/
+extern char* make_pwd(char* name, char* parent_pwd);
 
 
 

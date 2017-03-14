@@ -43,6 +43,8 @@ struct IDT_entry{
 };
 
 struct IDT_entry IDT[IDT_SIZE];
+char* user_part_pwd="Soteria@CAMEL:";
+char* pwd="Soteria@CAMEL:/$ ";
 
 void IDT_init(void){
 	unsigned long keyboard_address;
@@ -190,7 +192,7 @@ void kmain(unsigned int ebx){
 	message(openingMessage);
 
 	newlineX2();
-	message("Soteria@CAMEL:$ ");
+	message(pwd);
 
 
 	IDT_init();

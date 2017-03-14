@@ -73,6 +73,7 @@ void create_directory(char* name){
 			curDirectory[i].folder=1;
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
+			strcpy(curDirectory[i].path, make_pwd(name, FileIndex[currentDirectory].path));
 			return;
 		}
 	}
@@ -147,4 +148,12 @@ void delete_directory(char* name){
 			}
 		}
 	}
+}
+
+
+
+char* make_pwd(char* name, char* parent_pwd){
+	char* new_path=strcat(parent_pwd, name);
+	return strcat(new_path, "/");
+
 }
