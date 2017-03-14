@@ -53,7 +53,7 @@ void populate_file_system(){
 
     /*File objects*/
     File root = {"root", "Soteria@CAMEL:/$ ","/","",0, 0,(struct File*)FileSystem[0], 3, 1, 5};
-    File usr = {"usr", "Soteria@CAMEL:/usr$ ","/usr/","", 0, 1, (struct File*)FileSystem[1], 3, 1, 2};
+    File usr = {"usr", "Soteria@CAMEL:/usr$ ","/usr/","", 0, 1, (struct File*)FileSystem[1], 0, 1, 2};
     File home = {"home", "Soteria@CAMEL:/home$ ","/home/", "", 0,2, (struct File*)FileSystem[2], 3, 1, 1};
     File mnt = {"mnt", "Soteria@CAMEL:/mnt$ ","/mnt/","", 0,3, (struct File*)FileSystem[3], 3, 1, 1};
     File sys = {"sys", "Soteria@CAMEL:/sys$ ", "/sys/", "", 0,4, (struct File*)FileSystem[4], 0, 1, 1};

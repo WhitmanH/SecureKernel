@@ -78,6 +78,7 @@ void cd(void){
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
 		currentDirectory=1;
 		curDirectory = NullPage;
+		strcpy(pwd, FileIndex[0].pwd);
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
 		//strcpy(new_path, strcat(user_part_pwd, FileIndex[FileIndex[currentDirectory].parent_index].path));
 		strcpy(pwd, FileIndex[FileIndex[currentDirectory].parent_index].pwd);
@@ -88,7 +89,9 @@ void cd(void){
 		for(i = 0; i < max_file_size; ++i){ //cd usrArg, change to folder specified by usrArg
 			if(!strcmp(userArg, curDirectory[i].name)){
 				if(curDirectory[i].privilege==0){
-					message("You do not have the permissions to access \"sys\" file");
+					message("You do not have the permissions to access \"");
+					message(curDirectory[i].name);
+					message("\" file");
 					newlineX1();
 				}else if(curDirectory[i].folder==0){
 					message("File not folder!!!!!");
