@@ -45,7 +45,6 @@ File files[5];
 /* Better file system structure */
 File FileSystem[20][6];
 File FileIndex[20];
-char* cur_dur_name;
 
 
 
@@ -85,8 +84,6 @@ void FILESYSTEM_init(void){
 	FileIndex[8] = bin;
 	FileIndex[9] = src;
 	FileIndex[11] = andrew;
-	
-	cur_dur_name="root";
 
 
 	FileSystem[0][0]=usr; 
@@ -150,6 +147,7 @@ void create_directory(char* name){
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
+			curDirectory[i].folder=1;
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
 			return;
@@ -159,10 +157,23 @@ void create_directory(char* name){
 }
 
 void create_file(char* name, char * desc){
-	strcpy(files[cur_file].name,name);
-	strcpy(files[cur_file].desc,desc);
-	files[cur_file].parent_index = curDirectory[0].parent_index;
-	cur_file++;
+	int i=0;
+	for( ; i<6 ; i++){
+		if(!strcmp(curDirectory[i].name, "")){
+			message("make new file");
+			strcpy(curDirectory[i].name, name);
+			strcpy(curDirectory[i].desc, desc);
+			curDirectory[i].parent_index = currentDirectory;
+			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
+			curDirectory[i].privilege=3;
+			curDirectory[i].folder=0;
+			curDirectory[i].index=totalFiles;
+			FileIndex[totalFiles]= curDirectory[i];
+			totalFiles++; 
+			return;
+		}
+	}
+	message("The size of this file has exceed its maximum capcity. You directory cannot be created"); 
 }
 
 

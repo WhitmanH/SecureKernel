@@ -88,6 +88,11 @@ void cd(void){
 				if(curDirectory[i].privilege==0){
 					message("You do not have the permissions to access \"sys\" file");
 					newlineX1();
+				}else if(curDirectory[i].folder==0){
+					message("File not folder!!!!!");
+					newlineX1();
+					message("No open for you");
+					newlineX1();
 				}else{
 				currentDirectory = curDirectory[i].index;
 				File* temp = curDirectory;
