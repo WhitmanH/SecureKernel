@@ -10,12 +10,13 @@
 #define COLUMNS_IN_LINE 80
 #define LINES 25
 #define BYTES_FOR_EACH_ELEMENT 2
-#define NUMBER_SYS_CALLS 11
+#define NUMBER_SYS_CALLS 12
 
 #define MULTIBOOT_HEADER_MAGIC 0x1BADB002
 #define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002
 #define STACK_SIZE 0x4000
 #define NULL ( (void *) 0)
+#define max_file_size 6
 
 /*
 * Memory sizes
@@ -60,23 +61,10 @@ extern File* prevDirectory;
 extern File* blank;
 extern char* cur_dur_name;
 
-
+/*File system arrays*/
 extern File FileSystem[20][6];
 extern File FileIndex[20];
 
-
-/*File system arrays*/
-extern File lvl[1];
-extern File lvl0[1];
-extern File lvl1[6];
-extern File lvl_home[5];
-extern File lvl_usr[5];
-extern File lvl_lib[5];
-extern File lvl_mnt[5];
-extern File lvl_tmp1[1];
-extern File lvl_tmp[1];
-extern File lvl_sys[5];
-extern File files[5];
 
 /*MEMORY.C*/
 extern void *memcpy(void *dest, const void *src, unsigned short count);

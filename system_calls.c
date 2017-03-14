@@ -17,7 +17,7 @@ struct systemCalls{
 };
 
 struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "echo"}, {4, "ls"}, {5, "read"}, {6, "edit"},
-														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}};
+														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}, {12, "rm"}};
 
 int commandLookup(char* call){
 	int i;
@@ -66,7 +66,7 @@ void help(void){
 
 void ls(void){
 	int i;
-	for(i=0; i < 6; i++){
+	for(i=0; i < max_file_size; i++){
 			message(curDirectory[i].name);
 			message(" ");
 	}
@@ -83,7 +83,7 @@ void cd(void){
 		currentDirectory=next_dir;
 		curDirectory=FileSystem[next_dir];
 	} else {
-		for(i = 0; i < 6; ++i){ //cd usrArg, change to folder specified by usrArg
+		for(i = 0; i < max_file_size; ++i){ //cd usrArg, change to folder specified by usrArg
 			if(!strcmp(userArg, curDirectory[i].name)){
 				if(curDirectory[i].privilege==0){
 					message("You do not have the permissions to access \"sys\" file");
@@ -120,12 +120,22 @@ void echo(void){
 	}
 }
 
+void rm(void){
+	delete_file(userArg);
+}
+
+void rmdir(void){
+	delete_directory(userArg);
+}
+
+
 void cat(void){
 	int i=0;
-	for(i=0; i < cur_file; i++){
-		if(!strcmp(userArg, files[i].name)) {
-			message(files[i].desc);
+	for(i=0; i < max_file_size; i++){
+		if(!strcmp(userArg, curDirectory[i].name)) {
+			message(curDirectory[i].desc);
 			newlineX1();
+			return;
 		}else{
 			 message("File does not exist");
 			 newlineX1();

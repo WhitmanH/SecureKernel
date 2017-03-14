@@ -2,6 +2,7 @@
 //#include "stdio.h"
 #define numberFiles 12
 
+
 int totalFiles = numberFiles;
 int currentDirectory=0;
 char* pwd;
@@ -10,29 +11,6 @@ int cur_file=0;
 File* curDirectory;
 File* prevDirectory;
 File* blank;
-
-// /*Directory for level 0, root only*/
-// File lvl[1];
-// File lvl0[1];
-
-// /*Directory for level 1, usr, home, lib, mount, sys, tmp*/
-// File lvl1[6];
-// /*Directories in home file*/
-// File lvl_home[5];
-// /*Directories in mnt file*/
-// File lvl_mnt[5];
-
-// /*Directories in usr file*/
-// File lvl_usr[5];
-// /*Directories in lib file*/
-// File lvl_lib[5];
-// /*Directories in tmp file*/
-// File lvl_tmp[1];
-// File lvl_tmp1[1];
-// /*Directories in sys file*/
-// File lvl_sys[5];
-// File lvl_user[2];
-
 
 
 
@@ -45,7 +23,6 @@ File files[5];
 /* Better file system structure */
 File FileSystem[20][6];
 File FileIndex[20];
-
 
 
 
@@ -109,7 +86,7 @@ void create_file_system_array(){
 	File empty={"","","",0,0,NULL,0,0,0};
 	int i=0, j=0;
 	for( ; i<20; i++){
-		for(j=0; j<6; j++){
+		for(j=0; j<max_file_size; j++){
 			FileSystem[i][j] = empty;
 		}
 		
@@ -126,19 +103,16 @@ int find_cur_direcroty_idnes(){
 					message(" ");
 					message(FileIndex[j].name);
 				}
-
-			}
-			
+			}	
 		}
-		
-
 	}
 	return 0;
 }
 
+
 void create_directory(char* name){
 	int i=0;
-	for( ; i<6 ; i++){
+	for( ; i<max_file_size ; i++){
 		if(!strcmp(curDirectory[i].name, "")){
 			message("make new file");
 			strcpy(curDirectory[i].name, name);
@@ -158,7 +132,7 @@ void create_directory(char* name){
 
 void create_file(char* name, char * desc){
 	int i=0;
-	for( ; i<6 ; i++){
+	for( ; i<max_file_size ; i++){
 		if(!strcmp(curDirectory[i].name, "")){
 			message("make new file");
 			strcpy(curDirectory[i].name, name);
@@ -177,5 +151,42 @@ void create_file(char* name, char * desc){
 }
 
 
+void delete_file(char* name){
+	int i;
+	File empty={"","","",0,0,NULL,0,0,0};
+	for(i=0; i<max_file_size; i++){
+		if(!strcmp(userArg, curDirectory[i].name)){
+			if(curDirectory[i].folder==0){
+				message("delete");
+				curDirectory[i]=empty;
+				FileIndex[curDirectory[i].index]=empty;
+				totalFiles--;
+				newlineX1();
+			}else{
+				message("Directory, not a file, cant delete using rm. Use rmdir instead.");
+				newlineX1();
+			}
+		}
+	}
+}
 
 
+
+void delete_directory(char* name){
+	int i;
+	File empty={"","","",0,0,NULL,0,0,0};
+	for(i=0; i<max_file_size; i++){
+		if(!strcmp(userArg, curDirectory[i].name)){
+			if(curDirectory[i].folder==1){
+				message("delete");
+				curDirectory[i]=empty;
+				FileIndex[curDirectory[i].index]=empty;
+				totalFiles--;
+				newlineX1();
+			}else{
+				message("File not directory, cant delete using rmdir. Use rm instead.");
+				newlineX1();
+			}
+		}
+	}
+}

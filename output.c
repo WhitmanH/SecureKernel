@@ -35,12 +35,18 @@ void decodeInstruction(void){
 			break;
 		case 7 :
 			mkdir();
-			break;		
+			break;	
+		case 8:
+			rmdir();
+			break;	
 		case 9 :
 			cd();
 			break;
 		case 11:
 			cat();	
+			break;
+		case 12:
+			rm();
 			break;
 		default :
 			message(userInput); message(" is not a selected command. Type -help for more information.");
