@@ -34,7 +34,6 @@ extern int write_flag;
 extern int cur_file;
 
 
-
 /*FILESYSTEM.C*/
 typedef struct
 {
@@ -42,10 +41,10 @@ typedef struct
     char path[50];
     char desc[128];
     int level;
-    struct File* parent;
     struct File* children;
     int privilege;
     int folder;
+    int size;
 }File;
 
 
@@ -55,7 +54,13 @@ extern char* pwd;
 
 
 /*Pointer to current File system array */
-extern File* fileSystem;
+extern File* curDirectory;
+extern File* prevDirectory;
+extern File* blank;
+
+
+extern File FileSystem[20][6];
+extern File FileIndex[20];
 
 
 /*File system arrays*/
@@ -67,7 +72,7 @@ extern File lvl_usr[5];
 extern File lvl_lib[5];
 extern File lvl_mnt[5];
 extern File lvl_tmp1[1];
-extern File lvl_tmp[5];
+extern File lvl_tmp[1];
 extern File lvl_sys[5];
 extern File files[5];
 

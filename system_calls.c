@@ -66,8 +66,8 @@ void help(void){
 
 void ls(void){
 	int i;
-	for(i=0; i < totalFiles; i++){
-			message(fileSystem[i].name);
+	for(i=0; i < 6; i++){
+			message(curDirectory[i].name);
 			message(" ");
 	}
 	newlineX1();
@@ -75,18 +75,23 @@ void ls(void){
 
 void cd(void){
 	int i;
-	if((!strcmp(userArg, "..")) && (currentDirectory > 0)){
+	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
+		currentDirectory=1;
+		curDirectory = prevDirectory = blank;
+	}else if((!strcmp(userArg, "..")) && (currentDirectory > 0)){ //cd .. takes you to the prevdious directory.
 		currentDirectory--;
-		fileSystem=(File*)fileSystem[0].parent;
+		curDirectory=prevDirectory;
 	} else {
-		for(i = 0; i < totalFiles; ++i){
-			if(!strcmp(userArg, fileSystem[i].name)){
-				if(fileSystem[i].privilege==0){
+		for(i = 0; i < totalFiles; ++i){ //cd usrArg, change to folder specified by usrArg
+			if(!strcmp(userArg, curDirectory[i].name)){
+				if(curDirectory[i].privilege==0){
 					message("You do not have the permissions to access \"sys\" file");
 					newlineX1();
 				}else{
 				currentDirectory++;
-				fileSystem=(File*)fileSystem[i].children;
+				File* temp =curDirectory;
+				curDirectory=(File*)curDirectory[i].children;
+				prevDirectory=temp;
 				}
 			}
 		} 
