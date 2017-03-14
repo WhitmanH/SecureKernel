@@ -8,11 +8,6 @@ int currentDirectory=0;
 char* pwd;
 int cur_file=0;
 
-File* curDirectory;
-File* prevDirectory;
-File* blank;
-
-
 
 
 /*file system */

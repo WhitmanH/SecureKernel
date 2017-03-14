@@ -77,7 +77,7 @@ void cd(void){
 	int i;
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
 		currentDirectory=1;
-		curDirectory = prevDirectory = blank;
+		curDirectory = prevDirectory = NullPage;
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
 		int next_dir = FileIndex[currentDirectory].parent_index;
 		currentDirectory=next_dir;

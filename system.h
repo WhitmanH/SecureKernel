@@ -60,7 +60,7 @@ extern char* pwd;
 /*Pointer to current File system array */
 extern File* curDirectory;
 extern File* prevDirectory;
-extern File* blank;
+extern File* NullPage;
 extern char* cur_dur_name;
 
 /*File system arrays*/

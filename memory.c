@@ -4,6 +4,11 @@
 */
 #include "system.h"
 
+File* curDirectory;
+File* prevDirectory;
+File* NullPage;
+
+
 unsigned long *pageDirectory = (unsigned long *) 0x9C000;
 unsigned long *pageTable = (unsigned long *) 0x9D000; // Init page table (after page directory)
 
@@ -81,6 +86,6 @@ void populate_file_system(){
     FileSystem[6][0]=andrew;
 
 
-    blank=curDirectory=prevDirectory=FileSystem[0];
+    NullPage=curDirectory=prevDirectory=FileSystem[0];
 
 }
