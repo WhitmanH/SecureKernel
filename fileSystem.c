@@ -5,7 +5,7 @@
 
 int totalFiles = numberFiles;
 int currentDirectory=0;
-char* pwd;
+
 int cur_file=0;
 
 
@@ -13,6 +13,9 @@ int cur_file=0;
 /*file system */
 File FileSystem[max_file_system_size][max_file_size];
 File FileIndex[max_file_system_size];
+
+char new_path[100];
+char new_pwd[100];
 
 
 void FILESYSTEM_init(void){
@@ -23,7 +26,7 @@ void FILESYSTEM_init(void){
 }
 
 void create_file_system_array(){
-	File empty={"","","",0,0,NULL,0,0,0};
+	File empty={"","","","",0,0,NULL,0,0,0};
 	int i=0, j=0;
 	for( ; i<max_file_system_size; i++){
 		for(j=0; j<max_file_size; j++){
@@ -33,21 +36,6 @@ void create_file_system_array(){
 	}
 }
 
-int find_cur_direcroty_idnes(){
-	int i=0, j=0;
-	for( ; i<6; i++){
-		if(strcmp(curDirectory[i].name, "")){
-			for(j=0; j<numberFiles; j++){
-				if(!strcmp(FileIndex[j].name, curDirectory[i].name)){
-					message(curDirectory[i].name); 
-					message(" ");
-					message(FileIndex[j].name);
-				}
-			}	
-		}
-	}
-	return 0;
-}
 
 
 void create_directory(char* name){
@@ -66,14 +54,17 @@ void create_directory(char* name){
 			//message("make new direcoty");
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, "");
+			update_pwd(name, FileIndex[currentDirectory].basic_path);
 			curDirectory[i].parent_index = currentDirectory;
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
 			curDirectory[i].folder=1;
+			strcpy(curDirectory[i].pwd, new_pwd);
+			strcpy(curDirectory[i].basic_path, new_path);
 			FileIndex[totalFiles]= curDirectory[i];
+			
 			totalFiles++; 
-			strcpy(curDirectory[i].path, make_pwd(name, FileIndex[currentDirectory].path));
 			return;
 		}
 	}
@@ -112,15 +103,18 @@ void create_file(char* name, char * desc){
 
 void delete_file(char* name){
 	int i;
-	File empty={"","","",0,0,NULL,0,0,0};
+	File empty={"","","","",0,0,NULL,0,0,0};
 	for(i=0; i<max_file_size; i++){
-		if(!strcmp(userArg, curDirectory[i].name)){
+		if(!strcmp(name, curDirectory[i].name)){
 			if(curDirectory[i].folder==0){
 				message("delete");
+				strcpy(curDirectory[i].name, "");
 				curDirectory[i]=empty;
 				FileIndex[curDirectory[i].index]=empty;
 				totalFiles--;
 				newlineX1();
+				strcpy(curDirectory[i].name, "");
+				memset(curDirectory[i].name, '\0', 20);
 			}else{
 				message("Directory, not a file, cant delete using rm. Use rmdir instead.");
 				newlineX1();
@@ -133,11 +127,12 @@ void delete_file(char* name){
 
 void delete_directory(char* name){
 	int i;
-	File empty={"","","",0,0,NULL,0,0,0};
+	File empty={"","","","",0,0,NULL,0,0,0};
 	for(i=0; i<max_file_size; i++){
-		if(!strcmp(userArg, curDirectory[i].name)){
+		if(!strcmp(name, curDirectory[i].name)){
 			if(curDirectory[i].folder==1){
-				message("delete");
+				message(name);
+				message("|  delete");
 				curDirectory[i]=empty;
 				FileIndex[curDirectory[i].index]=empty;
 				totalFiles--;
@@ -151,9 +146,11 @@ void delete_directory(char* name){
 }
 
 
-
-char* make_pwd(char* name, char* parent_pwd){
-	char* new_path=strcat(parent_pwd, name);
-	return strcat(new_path, "/");
+void update_pwd(char* name, char* parent_pwd){
+	
+	memset(new_path, '\0', 100);
+	memset(new_pwd, '\0', 100);
+	strcpy(new_path, strcat(strcat(parent_pwd, name), "/"));
+	strcpy(new_pwd, strcat(strcat("Soteria@CAMEL:", new_path), "$ "));
 
 }

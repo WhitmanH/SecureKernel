@@ -10,7 +10,6 @@ char userArg2[128];
 
 
 
-
 struct systemCalls{
 	int id;
 	char call[64];
@@ -75,12 +74,13 @@ void ls(void){
 
 void cd(void){
 	int i;
+	//char new_path[150];
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
 		currentDirectory=1;
 		curDirectory = NullPage;
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
-		char* new_path=strcat(user_part_pwd, FileIndex[FileIndex[currentDirectory].parent_index].path);
-		pwd = (strcat(new_path, "$ "));
+		//strcpy(new_path, strcat(user_part_pwd, FileIndex[FileIndex[currentDirectory].parent_index].path));
+		strcpy(pwd, FileIndex[FileIndex[currentDirectory].parent_index].pwd);
 		int next_dir = FileIndex[currentDirectory].parent_index;
 		currentDirectory=next_dir;
 		curDirectory=FileSystem[next_dir];
@@ -96,9 +96,9 @@ void cd(void){
 					message("No open for you");
 					newlineX1();
 				}else{
-				char* new_path=strcat(user_part_pwd, curDirectory[i].path);
-				pwd = (strcat(new_path, "$ "));
-				newlineX1();
+				//strcpy(new_path,strcat(user_part_pwd, curDirectory[i].path));
+				strcpy(pwd, curDirectory[i].pwd);
+				//strcpy(pwd, (strcat(new_path, "$ ")));
 				currentDirectory = curDirectory[i].index;
 				File* temp = curDirectory;
 				curDirectory=(File*)curDirectory[i].children;
@@ -128,7 +128,9 @@ void rm(void){
 }
 
 void rmdir(void){
+	//pwd=user_part_pwd;
 	delete_directory(userArg);
+
 }
 
 
@@ -139,9 +141,6 @@ void cat(void){
 			message(curDirectory[i].desc);
 			newlineX1();
 			return;
-		}else{
-			 message("File does not exist");
-			 newlineX1();
 		}
 	}
 

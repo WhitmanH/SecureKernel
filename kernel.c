@@ -29,6 +29,8 @@ int numbKeys = 0;
 int argFlag = 0;
 int echo_flag=0;
 int write_flag=0;
+char user_part_pwd[40];
+char pwd[250];
 
 
 /*
@@ -43,8 +45,6 @@ struct IDT_entry{
 };
 
 struct IDT_entry IDT[IDT_SIZE];
-char* user_part_pwd="Soteria@CAMEL:";
-char* pwd="Soteria@CAMEL:/$ ";
 
 void IDT_init(void){
 	unsigned long keyboard_address;
@@ -181,6 +181,8 @@ void keyboard_handler_main(void){
 
 
 void kmain(unsigned int ebx){
+	strcpy(user_part_pwd, "Soteria@CAMEL:");
+	strcpy(pwd,"Soteria@CAMEL:/$ ");
 	
 	multiboot_info_t *mbinfo = (multiboot_info_t *) ebx;
 	unsigned int address_of_module = mbinfo->mods_addr;

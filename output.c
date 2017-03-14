@@ -3,7 +3,6 @@
 extern char* vram;
 extern unsigned int current_loc;
 extern char userInput[128];
-extern char* pwd;
 
 void newlineX2(void){
 	unsigned int line_size = BYTES_FOR_EACH_ELEMENT * COLUMNS_IN_LINE;

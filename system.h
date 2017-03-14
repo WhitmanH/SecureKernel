@@ -41,7 +41,8 @@ extern int cur_file;
 typedef struct
 {
     char name[20];
-    char path[50];
+    char pwd[50];
+    char basic_path[50];
     char desc[128];
     int parent_index;
     int index;
@@ -53,12 +54,11 @@ typedef struct
 
 
 /*Path variable to be printed to terminal*/
-extern char* pwd;
 
 
 extern int totalFiles;
-extern char* user_part_pwd;
-extern char* pwd;
+extern char user_part_pwd[40];
+extern char pwd[250];
 
 
 /*Pointer to current File system array */
@@ -88,9 +88,6 @@ extern void clear(void);
 extern void message(char* message);
 extern void openingScreen();
 
-/*fileSystem.c*/
-extern char* make_pwd(char* name, char* parent_pwd);
-
 
 
 /*SOT_STDLIB.C*/
@@ -102,6 +99,7 @@ extern char *strstrip(char *s);
 
 /*SYSTEM_CALLS.C*/
 extern int commandLookup(char* call);
+extern void update_pwd(char* name, char* parent_pwd);
 
 
 /*VGA*/
