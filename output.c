@@ -34,7 +34,7 @@ void decodeInstruction(void){
 			ls();
 			break;
 		case 7 :
-			echo();
+			mkdir();
 			break;		
 		case 9 :
 			cd();

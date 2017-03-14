@@ -40,7 +40,8 @@ typedef struct
     char name[20];
     char path[50];
     char desc[128];
-    int level;
+    int parent_index;
+    int index;
     struct File* children;
     int privilege;
     int folder;
@@ -57,6 +58,7 @@ extern char* pwd;
 extern File* curDirectory;
 extern File* prevDirectory;
 extern File* blank;
+extern char* cur_dur_name;
 
 
 extern File FileSystem[20][6];
@@ -82,6 +84,8 @@ extern void *memset(void *dest, char val, unsigned short count);
 extern unsigned short *memsetw(unsigned short *dest, unsigned short val, unsigned short count);
 extern unsigned short strlen(const char *str);
 extern void paging_init(void);
+extern void create_file_system_array();
+extern int find_cur_direcroty_idnes(); 
 
 /*output.C*/
 extern void newlineX2(void);
@@ -90,6 +94,7 @@ extern void newCommand(void);
 extern void clear(void);
 extern void message(char* message);
 extern void openingScreen();
+
 
 
 /*SOT_STDLIB.C*/

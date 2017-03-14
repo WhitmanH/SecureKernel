@@ -1,9 +1,9 @@
 #include "system.h"
 //#include "stdio.h"
-#define numberFiles 8
+#define numberFiles 12
 
 int totalFiles = numberFiles;
-int currentDirectory;
+int currentDirectory=0;
 char* pwd;
 int cur_file=0;
 
@@ -45,6 +45,7 @@ File files[5];
 /* Better file system structure */
 File FileSystem[20][6];
 File FileIndex[20];
+char* cur_dur_name;
 
 
 
@@ -55,49 +56,37 @@ File FileIndex[20];
 void FILESYSTEM_init(void){
 
 	int i=0,j=0;
+	create_file_system_array();
 	currentDirectory = 0;
-	File empty={"","","",0,NULL,0,0,0};
-	File root = {"root", "","",0, (struct File*)FileSystem[0], 3, 1, 5};
-	File usr = {"usr", "usr","", 1, (struct File*)FileSystem[1], 3, 1, 2};
-	File home = {"home", "home", "", 1, (struct File*)FileSystem[2], 3, 1, 1};
+	//File empty={"","","",0,0,NULL,0,0,0,0};
+	File root = {"root", "","",0, 0,(struct File*)FileSystem[0], 3, 1, 5};
+	File usr = {"usr", "usr","", 0, 1, (struct File*)FileSystem[1], 3, 1, 2};
+	File home = {"home", "home", "", 0,2, (struct File*)FileSystem[2], 3, 1, 1};
 	//File lib = {"lib", "lib", "", 1, (struct File*)lvl, (struct File*)lvl_lib, 3, 1};
-	File mnt = {"mnt", "mnt","", 1,  (struct File*)FileSystem[3], 3, 1, 1};
-	File sys = {"sys", "sys", "", 1, (struct File*)FileSystem[4], 0, 1, 1};
-	File tmp = {"tmp", "tmp", "", 1, (struct File*)FileSystem[5], 3, 1, 0};
+	File mnt = {"mnt", "mnt","", 0,3, (struct File*)FileSystem[3], 3, 1, 1};
+	File sys = {"sys", "sys", "", 0,4, (struct File*)FileSystem[4], 0, 1, 1};
+	File tmp = {"tmp", "tmp", "", 0,5, (struct File*)FileSystem[5], 3, 1, 0};
 
-	File user = {"user", "home/user", "", 2, (struct File*)FileSystem[6], 3, 1, 0};
-	File c_drive = {"c", "mnt/c", "", 2, (struct File*)FileSystem[7], 3, 1,0};
-	File bin = {"bin", "usr/bin", "", 2,  (struct File*)FileSystem[8], 3, 1, 0};
-	File src = {"src", "usr/src", "", 2, (struct File*)FileSystem[9], 3, 1, 0};
-	File kern = {"kernel", "usr/kernelnasm", "", 2, (struct File*)FileSystem[10], 3, 1, 0};
-	File temp_blank = {"", "tmp", "", 2, (struct File*)FileSystem[11], 3, 1, 0};
+	File user = {"user", "home/user", "", 2 ,6, (struct File*)FileSystem[6], 3, 1, 0};
+	File c_drive = {"c", "mnt/c", "", 4,7, (struct File*)FileSystem[7], 3, 1,0};
+	File bin = {"bin", "usr/bin", "", 1,8,  (struct File*)FileSystem[8], 3, 1, 0};
+	File src = {"src", "usr/src", "", 1,9, (struct File*)FileSystem[9], 3, 1, 0};
+	File kern = {"kernel", "usr/kernelnasm", "", 2, 10, (struct File*)FileSystem[10], 3, 1, 0};
+	File andrew  ={"andrew","home/user/andrew", "", 6, 11, (struct File*)FileSystem[11], 3, 1, 0};
 
-	File FileIndex[20] = {usr, home, sys, mnt, tmp, bin, src, user};
-
-
-
-
-	// lvl[0] = root;
-	// lvl1[0] = usr;
-	// lvl1[1] = home;
-	// lvl1[2] = sys;
-	// //lvl1[2] = lib;
-	// lvl1[3] = mnt;
-	// lvl1[4] = tmp;
-
-
+	FileIndex[0]= root;
+	FileIndex[1] = usr;
+	FileIndex[2] = home;
+	FileIndex[4] = sys;
+	FileIndex[3] = mnt;
+	FileIndex[5] = tmp;
+	FileIndex[6] = user;
+	FileIndex[7] = c_drive;
+	FileIndex[8] = bin;
+	FileIndex[9] = src;
+	FileIndex[11] = andrew;
 	
-	// lvl_home[0] = user;
-	// lvl_mnt[0] = c_drive;
-	// lvl_usr[0]=bin;
-	// lvl_usr[1]=src;
-	// lvl_sys[0]=kern;
-	// lvl_tmp1[0]=temp_blank;
-	
-	// lvl_user[0]=empty;
-	// //fileSystem[7] = user; 
-	// //curDirectory=prevDirectory=lvl1;
-	// //blank=lvl1;
+	cur_dur_name="root";
 
 
 	FileSystem[0][0]=usr; 
@@ -111,23 +100,68 @@ void FILESYSTEM_init(void){
 
 	FileSystem[2][0]=user;
 
+	FileSystem[6][0]=andrew;
+
 
 	blank=curDirectory=prevDirectory=FileSystem[0];
 
 
 }
 
+void create_file_system_array(){
+	File empty={"","","",0,0,NULL,0,0,0};
+	int i=0, j=0;
+	for( ; i<20; i++){
+		for(j=0; j<6; j++){
+			FileSystem[i][j] = empty;
+		}
+		
+	}
+}
+
+int find_cur_direcroty_idnes(){
+	int i=0, j=0;
+	for( ; i<6; i++){
+		if(strcmp(curDirectory[i].name, "")){
+			for(j=0; j<numberFiles; j++){
+				if(!strcmp(FileIndex[j].name, curDirectory[i].name)){
+					message(curDirectory[i].name); 
+					message(" ");
+					message(FileIndex[j].name);
+				}
+
+			}
+			
+		}
+		
+
+	}
+	return 0;
+}
+
 void create_directory(char* name){
-	strcpy(files[cur_file].name,name);
-	strcpy(files[cur_file].desc,"");
-	files[cur_file].level = curDirectory[0].level;
-	cur_file++;
+	int i=0;
+	for( ; i<6 ; i++){
+		if(!strcmp(curDirectory[i].name, "")){
+			message("make new file");
+			strcpy(curDirectory[i].name, name);
+			strcpy(curDirectory[i].desc, "");
+			curDirectory[i].parent_index = currentDirectory;
+			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
+			curDirectory[i].privilege=3;
+			curDirectory[i].index=totalFiles;
+			FileIndex[totalFiles]= curDirectory[i];
+			totalFiles++; 
+			return;
+		}
+	}
+	message("The size of this file has exceed its maximum capcity. You directory cannot be created"); 
 }
 
 void create_file(char* name, char * desc){
 	strcpy(files[cur_file].name,name);
 	strcpy(files[cur_file].desc,desc);
-	files[cur_file].level = curDirectory[0].level;
+	files[cur_file].parent_index = curDirectory[0].parent_index;
 	cur_file++;
 }
 

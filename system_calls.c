@@ -78,18 +78,19 @@ void cd(void){
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
 		currentDirectory=1;
 		curDirectory = prevDirectory = blank;
-	}else if((!strcmp(userArg, "..")) && (currentDirectory > 0)){ //cd .. takes you to the prevdious directory.
-		currentDirectory--;
-		curDirectory=prevDirectory;
+	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
+		int next_dir = FileIndex[currentDirectory].parent_index;
+		currentDirectory=next_dir;
+		curDirectory=FileSystem[next_dir];
 	} else {
-		for(i = 0; i < totalFiles; ++i){ //cd usrArg, change to folder specified by usrArg
+		for(i = 0; i < 6; ++i){ //cd usrArg, change to folder specified by usrArg
 			if(!strcmp(userArg, curDirectory[i].name)){
 				if(curDirectory[i].privilege==0){
 					message("You do not have the permissions to access \"sys\" file");
 					newlineX1();
 				}else{
-				currentDirectory++;
-				File* temp =curDirectory;
+				currentDirectory = curDirectory[i].index;
+				File* temp = curDirectory;
 				curDirectory=(File*)curDirectory[i].children;
 				prevDirectory=temp;
 				}
@@ -99,8 +100,8 @@ void cd(void){
 }
 
 void mkdir(void){
-	//create_directory(userArg);
-	message(userArg);
+	create_directory(userArg);
+	//message(userArg);
 }
 
 void echo(void){
