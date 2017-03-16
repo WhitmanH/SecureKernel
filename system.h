@@ -35,6 +35,7 @@ extern char userArg3[128];
 extern char userArg4[128];
 extern int write_flag;
 extern int cur_file;
+extern unsigned char keyboard_map[128];
 
 
 /*FILESYSTEM.C*/
@@ -49,7 +50,13 @@ typedef struct
     struct File* children;
     int privilege;
     int folder;
-    int size;
+    int num_files;
+    char permissions[20];
+    char owner[20];
+    char group[20];
+    char links[5];
+    char date[25];
+    char size[5];
 }File;
 
 

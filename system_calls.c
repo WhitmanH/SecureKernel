@@ -20,9 +20,6 @@ struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"},
 
 int commandLookup(char* call){
 	int i;
-	//int = strlen(sCall)
-	// char* tmp = strstrip(call);
-	// message(tmp);
 	for(i = 0; i < NUMBER_SYS_CALLS; ++i){
 		if(!strcmp(call, SYSTEM_CALLS[i].call)){
 			return SYSTEM_CALLS[i].id;
@@ -65,43 +62,66 @@ void help(void){
 
 void ls(void){
 	int i;
-	for(i=0; i < max_file_size; i++){
-			message(curDirectory[i].name);
-			message(" ");
+	if (!strcmp(userArg, "-la")){
+		message("drwxr-xr-x 2 root root   0 Dec 31  1969 .");
+		newlineX1();
+		message("drwxr-xr-x 2 root root   0 Dec 31  1969 ..");
+		newlineX1();
+		for(i=0; i < FileIndex[currentDirectory].num_files; i++){
+				message(curDirectory[i].permissions);
+				message(" ");
+				message(curDirectory[i].links);
+				message(" ");
+				message(curDirectory[i].owner);
+				message(" ");
+				message(curDirectory[i].group);
+				message("   ");
+				message(curDirectory[i].size);
+				message(" ");
+				message(curDirectory[i].date);
+				message(" ");
+				message(curDirectory[i].name);
+				newlineX1();
+		}
+		newlineX1();
+	}else if (! strcmp(userArg, "")){
+		for(i=0; i < max_file_size; i++){
+				message(curDirectory[i].name);
+				message(" ");
+		}
+		newlineX1();
 	}
-	newlineX1();
 }
 
 void cd(void){
 	int i;
+	char messg[2];
 	//char new_path[150];
 	if((!strcmp(userArg, ""))){ //cd with no userArg takes you to root directory.
-		currentDirectory=1;
+		currentDirectory=0;
 		curDirectory = NullPage;
-		strcpy(pwd, FileIndex[0].pwd);
+		strcpy(pwd, "Soteria@CAMEL:/$ ");
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
-		//strcpy(new_path, strcat(user_part_pwd, FileIndex[FileIndex[currentDirectory].parent_index].path));
-		strcpy(pwd, FileIndex[FileIndex[currentDirectory].parent_index].pwd);
 		int next_dir = FileIndex[currentDirectory].parent_index;
+		
+		strcpy(pwd, FileIndex[next_dir].pwd);
 		currentDirectory=next_dir;
 		curDirectory=FileSystem[next_dir];
 	} else {
 		for(i = 0; i < max_file_size; ++i){ //cd usrArg, change to folder specified by usrArg
 			if(!strcmp(userArg, curDirectory[i].name)){
-				if(curDirectory[i].privilege==0){
+				if(strcmp(curDirectory[i].permissions[7],'r')){
 					message("You do not have the permissions to access \"");
 					message(curDirectory[i].name);
 					message("\" file");
 					newlineX1();
-				}else if(curDirectory[i].folder==0){
+				}else if( strcmp(curDirectory[i].permissions[0],'d')){
 					message("File not folder!!!!!");
 					newlineX1();
 					message("No open for you");
 					newlineX1();
 				}else{
-				//strcpy(new_path,strcat(user_part_pwd, curDirectory[i].path));
 				strcpy(pwd, curDirectory[i].pwd);
-				//strcpy(pwd, (strcat(new_path, "$ ")));
 				currentDirectory = curDirectory[i].index;
 				File* temp = curDirectory;
 				curDirectory=(File*)curDirectory[i].children;
@@ -113,7 +133,16 @@ void cd(void){
 }
 
 void mkdir(void){
-	create_directory(userArg);
+	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
+		message("mkdir: cannot create directory \"");
+		message(userArg);
+		message("\": Permission denied");
+		newlineX1();
+	}else{
+		create_directory(userArg);
+	}
+
+	
 }
 
 void echo(void){
@@ -127,12 +156,26 @@ void echo(void){
 }
 
 void rm(void){
-	delete_file(userArg);
+	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
+		message("rm: cannot create directory \"");
+		message(userArg);
+		message("\": Permission denied");
+		newlineX1();
+	}else{
+		delete_file(userArg);
+	}
 }
 
 void rmdir(void){
 	//pwd=user_part_pwd;
-	delete_directory(userArg);
+	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
+		message("rmdir: cannot create directory \"");
+		message(userArg);
+		message("\": Permission denied");
+		newlineX1();
+	}else{
+		delete_directory(userArg);
+	}
 
 }
 

@@ -52,18 +52,18 @@ void populate_file_system(){
     currentDirectory = 0;
 
     /*File objects*/
-    File root = {"root", "Soteria@CAMEL:/$ ","/","",0, 0,(struct File*)FileSystem[0], 3, 1, 5};
-    File usr = {"usr", "Soteria@CAMEL:/usr$ ","/usr/","", 0, 1, (struct File*)FileSystem[1], 0, 1, 2};
-    File home = {"home", "Soteria@CAMEL:/home$ ","/home/", "", 0,2, (struct File*)FileSystem[2], 3, 1, 1};
-    File mnt = {"mnt", "Soteria@CAMEL:/mnt$ ","/mnt/","", 0,3, (struct File*)FileSystem[3], 3, 1, 1};
-    File sys = {"sys", "Soteria@CAMEL:/sys$ ", "/sys/", "", 0,4, (struct File*)FileSystem[4], 0, 1, 1};
-    File tmp = {"tmp", "Soteria@CAMEL:/tmp$ ", "/tmp/", "", 0,5, (struct File*)FileSystem[5], 3, 1, 0};
-    File user = {"user", "Soteria@CAMEL:/home/user$ ", "/home/user/", "", 2 ,6, (struct File*)FileSystem[6], 3, 1, 0};
-    File c_drive = {"c", "Soteria@CAMEL:/mnt/c$ ", "/mnt/c/", "", 4,7, (struct File*)FileSystem[7], 3, 1,0};
-    File bin = {"bin", "Soteria@CAMEL:/usr/bin$ ", "/user/bin/", "", 1,8,  (struct File*)FileSystem[8], 3, 1, 0};
-    File src = {"src", "Soteria@CAMEL:/usr/src$ ", "/usr/src/", "", 1,9, (struct File*)FileSystem[9], 3, 1, 0};
-    File kern = {"kernel", "Soteria@CAMEL:/usr/kernel$ ", "/user/kernel/", "", 2, 10, (struct File*)FileSystem[10], 3, 1, 0};
-    File andrew  ={"andrew","Soteria@CAMEL:/home/user/andrew$ ", "/home/user/andrew/", "", 6, 11, (struct File*)FileSystem[11], 3, 1, 0};
+    File root = {"root", "Soteria@CAMEL:/$ ","/","",0, 0,(struct File*)FileSystem[0], 3, 1, 5,"d---------", "", "", "", "Dec 31  1969", "0"};
+    File usr = {"usr", "Soteria@CAMEL:/usr$ ","/usr/","", 0, 1, (struct File*)FileSystem[1], 0, 1, 2,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File home = {"home", "Soteria@CAMEL:/home$ ","/home/", "", 0,2, (struct File*)FileSystem[2], 3, 1, 1,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File mnt = {"mnt", "Soteria@CAMEL:/mnt$ ","/mnt/","", 0,3, (struct File*)FileSystem[3], 3, 1, 1,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File sys = {"sys", "Soteria@CAMEL:/sys$ ", "/sys/", "", 0,4, (struct File*)FileSystem[4], 0, 1, 1,"drwxr-xr-x", "root", "root", "1", "Dec 31  1969", "0"};
+    File tmp = {"tmp", "Soteria@CAMEL:/tmp$ ", "/tmp/", "", 0,5, (struct File*)FileSystem[5], 3, 1, 0,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File user = {"camel", "Soteria@CAMEL:/home/camel$ ", "/home/camel/", "", 2 ,6, (struct File*)FileSystem[6], 3, 1, 0,"drwxr-xrwx", "camel", "camel", "2", "Mar 14 2017", "0"};
+    File c_drive = {"c", "Soteria@CAMEL:/mnt/c$ ", "/mnt/c/", "", 4,7, (struct File*)FileSystem[7], 3, 1,0,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File bin = {"bin", "Soteria@CAMEL:/usr/bin$ ", "/user/bin/", "", 1,8,  (struct File*)FileSystem[8], 3, 1, 0,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File src = {"src", "Soteria@CAMEL:/usr/src$ ", "/usr/src/", "", 1,9, (struct File*)FileSystem[9], 3, 1, 0,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    File kern = {"kernel", "Soteria@CAMEL:/usr/kernel$ ", "/user/kernel/", "", 2, 10, (struct File*)FileSystem[10], 3, 1, 0,"drwxr-xr-x", "root", "root", "2", "Dec 31  1969", "0"};
+    //File andrew  ={"andrew","Soteria@CAMEL:/home/user/andrew$ ", "/home/user/andrew/", "", 6, 11, (struct File*)FileSystem[11], 3, 1, 0,"drwxrwxrwx", "root", "root", "2", "Dec 31  1969", "0"};
 
     /*Used to keep track of current files index in FileSystem*/
     FileIndex[0]= root;
@@ -76,7 +76,7 @@ void populate_file_system(){
     FileIndex[7] = c_drive;
     FileIndex[8] = bin;
     FileIndex[9] = src;
-    FileIndex[11] = andrew;
+    //FileIndex[11] = andrew;
 
     /*Populating the filesystem with initial files*/
     FileSystem[0][0]=usr; 
@@ -90,7 +90,7 @@ void populate_file_system(){
 
     FileSystem[2][0]=user;
 
-    FileSystem[6][0]=andrew;
+   // FileSystem[6][0]=andrew;
 
     /*Keep tack of the current directory, and setting NullPage pointer*/
     NullPage=curDirectory=FileSystem[0];

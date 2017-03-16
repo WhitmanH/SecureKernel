@@ -40,35 +40,50 @@ void create_file_system_array(){
 
 void create_directory(char* name){
 	int i=0;
+	
 	if(!strcmp(name,"")) {// Cannot make a directory with no name
 			message("You need to enter directory name");
 			newlineX1();
 			return;
 		}
-	for( ; i<max_file_size ; i++){
+	for( i=0; i<max_file_size ; i++){
+		message("forloop ");
+		message(curDirectory[i].name);
+		newlineX1();
 		if(!strcmp(curDirectory[i].name, name)){//Cannot make a directory that with same path
 			message("That file already exists");
 			newlineX1();
+			newlineX1();
 			return;
-		}else if((!strcmp(curDirectory[i].name, ""))){
+		}else if(curDirectory[i].folder !=0 && curDirectory[i].folder !=1){
 			//message("make new direcoty");
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, "");
 			update_pwd(name, FileIndex[currentDirectory].basic_path);
 			curDirectory[i].parent_index = currentDirectory;
+			
+			
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
 			curDirectory[i].folder=1;
 			strcpy(curDirectory[i].pwd, new_pwd);
 			strcpy(curDirectory[i].basic_path, new_path);
+			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
+			strcpy(curDirectory[i].links, "2");
+			strcpy(curDirectory[i].owner, "camel");
+			strcpy(curDirectory[i].group, "camel");
+			strcpy(curDirectory[i].size, "0");
+			strcpy(curDirectory[i].date, "Mar 16  2017");
 			FileIndex[totalFiles]= curDirectory[i];
+			FileIndex[currentDirectory].num_files++;
 			
 			totalFiles++; 
 			return;
 		}
 	}
-	message("The size of this file has exceed its maximum capcity. You directory cannot be created"); 
+	message("The size of this file has exceed its maximum capcity. You directory cannot be created");
+	newlineX1(); 
 }
 
 
@@ -94,6 +109,7 @@ void create_file(char* name, char * desc){
 			curDirectory[i].index=totalFiles;
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
+			FileIndex[currentDirectory].num_files;
 			return;
 		}
 	}
@@ -109,12 +125,13 @@ void delete_file(char* name){
 			if(curDirectory[i].folder==0){
 				message("delete");
 				strcpy(curDirectory[i].name, "");
-				curDirectory[i]=empty;
 				FileIndex[curDirectory[i].index]=empty;
+				curDirectory[i]=empty;
 				totalFiles--;
 				newlineX1();
 				strcpy(curDirectory[i].name, "");
 				memset(curDirectory[i].name, '\0', 20);
+				FileIndex[currentDirectory].num_files--;
 			}else{
 				message("Directory, not a file, cant delete using rm. Use rmdir instead.");
 				newlineX1();
@@ -131,12 +148,10 @@ void delete_directory(char* name){
 	for(i=0; i<max_file_size; i++){
 		if(!strcmp(name, curDirectory[i].name)){
 			if(curDirectory[i].folder==1){
-				message(name);
-				message("|  delete");
-				curDirectory[i]=empty;
 				FileIndex[curDirectory[i].index]=empty;
+				curDirectory[i]=empty;
 				totalFiles--;
-				newlineX1();
+				FileIndex[currentDirectory].num_files--;
 			}else{
 				message("File not directory, cant delete using rmdir. Use rm instead.");
 				newlineX1();
