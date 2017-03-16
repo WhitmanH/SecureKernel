@@ -46,9 +46,6 @@ void create_directory(char* name){
 			return;
 		}
 	for( i=0; i<max_file_size ; i++){
-		message("forloop ");
-		message(curDirectory[i].name);
-		newlineX1();
 		if(!strcmp(curDirectory[i].name, name)){//Cannot make a directory that with same path
 			message("That file already exists");
 			newlineX1();
@@ -59,9 +56,7 @@ void create_directory(char* name){
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, "");
 			update_pwd(name, FileIndex[currentDirectory].basic_path);
-			curDirectory[i].parent_index = currentDirectory;
-			
-			
+			curDirectory[i].parent_index = currentDirectory;			
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
