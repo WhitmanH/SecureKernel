@@ -10,7 +10,7 @@
 #define COLUMNS_IN_LINE 80
 #define LINES 25
 #define BYTES_FOR_EACH_ELEMENT 2
-#define NUMBER_SYS_CALLS 12
+#define NUMBER_SYS_CALLS 13
 
 #define MULTIBOOT_HEADER_MAGIC 0x1BADB002
 #define MULTIBOOT_BOOTLOADER_MAGIC 0x2BADB002
@@ -204,8 +204,6 @@ enum vga_color {
        unsigned long length_high;
        unsigned long type;
      } memory_map_t;
-
-
 
 
 #endif

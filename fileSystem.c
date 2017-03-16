@@ -61,6 +61,8 @@ void create_directory(char* name){
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
 			curDirectory[i].folder=1;
+
+
 			strcpy(curDirectory[i].pwd, new_pwd);
 			strcpy(curDirectory[i].basic_path, new_path);
 			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
@@ -92,18 +94,28 @@ void create_file(char* name, char * desc){
 		if(!strcmp(curDirectory[i].name, name)){//Cannot make a file whos path already exists
 			message("That file already exists");
 			return;
-		}else if((!strcmp(curDirectory[i].name, ""))){
-			//message("make new file");
+		}else if(curDirectory[i].folder !=2 && curDirectory[i].folder !=1){
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, desc);
+			update_pwd(name, FileIndex[currentDirectory].basic_path);
 			curDirectory[i].parent_index = currentDirectory;
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
-			curDirectory[i].folder=2;
 			curDirectory[i].index=totalFiles;
+			curDirectory[i].folder=2;
+
+			strcpy(curDirectory[i].pwd, new_pwd);
+			strcpy(curDirectory[i].basic_path, new_path);
+			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
+			strcpy(curDirectory[i].links, "2");
+			strcpy(curDirectory[i].owner, "camel");
+			strcpy(curDirectory[i].group, "camel");
+			strcpy(curDirectory[i].size, "0");
+			strcpy(curDirectory[i].date, "Mar 16  2017");
+			
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
-			FileIndex[currentDirectory].num_files;
+			FileIndex[currentDirectory].num_files++;
 			return;
 		}
 	}
@@ -116,7 +128,7 @@ void delete_file(char* name){
 	File empty={"","","","",0,0,NULL,0,0,0};
 	for(i=0; i<max_file_size; i++){
 		if(!strcmp(name, curDirectory[i].name)){
-			if(curDirectory[i].folder==0){
+			if(curDirectory[i].folder==2){
 				message("delete");
 				strcpy(curDirectory[i].name, "");
 				FileIndex[curDirectory[i].index]=empty;
@@ -156,7 +168,6 @@ void delete_directory(char* name){
 
 
 void update_pwd(char* name, char* parent_pwd){
-	
 	memset(new_path, '\0', 100);
 	memset(new_pwd, '\0', 100);
 	strcpy(new_path, strcat(strcat(parent_pwd, name), "/"));

@@ -16,7 +16,7 @@ struct systemCalls{
 };
 
 struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "echo"}, {4, "ls"}, {5, "read"}, {6, "edit"},
-														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}, {12, "rm"}};
+														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}, {12, "rm"}, {13, "chmod"}};
 
 int commandLookup(char* call){
 	int i;
@@ -44,6 +44,64 @@ void clear(void){
 	current_loc = 0;
 }
 
+void chmod (void){
+	int i=0, j=1, k=0;
+	int file=-1;
+	char per[3]="";
+	memset(per, '\0', 3);
+
+
+	if(!strcmp(FileIndex[currentDirectory].owner, "camel")){
+		for(i=0; i <totalFiles; i++){
+			if(!strcmp(FileIndex[i].name, userArg2)){
+				file=i;
+				break;
+			}
+		}
+		for(i=0; i<3; i++){
+			switch(userArg[i]){
+				case '0' :
+					strcpy(per,"---");
+					break;
+				case '1' :
+					strcpy(per,"--x");
+					break;
+				case '2' : 
+					strcpy(per,"-w-");
+					break;
+				case '3' : 
+					strcpy(per,"-wx");
+					break;		
+				case '4' :
+					strcpy(per,"r--");
+					break;
+				case '5' :
+					strcpy(per,"r-x");
+					break;
+				case '6' :
+					strcpy(per,"rw-");
+					break;
+				case '7' :
+					strcpy(per,"rwx");
+					break;	
+				default :
+					strcpy(per,"---");
+				}
+				if(file > -1){
+					for(k=0; k<3; k++){
+						curDirectory[file].permissions[j]=per[k];
+						j++;
+					}
+				}
+			}
+		}else{
+			message("chmod: cannot modify directory \"");
+			message(userArg);
+			message("\": Permission denied");
+			newlineX1();
+		}
+}
+
 
 void help(void){
 	newlineX2();
@@ -59,6 +117,7 @@ void help(void){
 	message("For help on a specific system call type -help <system call>.");
 	newlineX2();
 }
+
 
 void ls(void){
 	int i;
@@ -103,7 +162,7 @@ void cd(void){
 		strcpy(pwd, "Soteria@CAMEL:/$ ");
 	}else if((!strcmp(userArg, ".."))){ //cd .. takes you to the prevdious directory.
 		int next_dir = FileIndex[currentDirectory].parent_index;
-		
+
 		strcpy(pwd, FileIndex[next_dir].pwd);
 		currentDirectory=next_dir;
 		curDirectory=FileSystem[next_dir];
@@ -133,7 +192,7 @@ void cd(void){
 }
 
 void mkdir(void){
-	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
+	if(strcmp(FileIndex[currentDirectory].permissions[7],'r')){
 		message("mkdir: cannot create directory \"");
 		message(userArg);
 		message("\": Permission denied");
@@ -147,8 +206,15 @@ void mkdir(void){
 
 void echo(void){
 	if(write_flag){
+		if(strcmp(FileIndex[currentDirectory].permissions[7],'r')){
+			message("echo: cannot create file \"");
+			message(userArg);
+			message("\": Permission denied");
+			newlineX1();
+		}else{
 		create_file(userArg3, userArg);
 		newlineX1();
+		}
 	}else{
 		message(strcat(userArg, userArg2));
 		newlineX1();
@@ -156,27 +222,39 @@ void echo(void){
 }
 
 void rm(void){
-	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
-		message("rm: cannot create directory \"");
-		message(userArg);
-		message("\": Permission denied");
-		newlineX1();
-	}else{
-		delete_file(userArg);
+		int i=0;
+	for(i=0; i < max_file_size; i++){
+		if(!strcmp(userArg, curDirectory[i].name)) {
+			if(strcmp(FileIndex[currentDirectory].permissions[8],'w')){
+				message("rm: cannot create directory \"");
+				message(userArg);
+				message("\": Permission denied");
+				newlineX1();
+				return;
+			}else{
+				delete_file(userArg);
+				return;
+			}
+		}
 	}
 }
 
 void rmdir(void){
-	//pwd=user_part_pwd;
-	if(strcmp( FileIndex[currentDirectory].permissions[8],'w') || strcmp(FileIndex[currentDirectory].group, "camel") || strcmp(FileIndex[currentDirectory].owner, "camel")){
-		message("rmdir: cannot create directory \"");
-		message(userArg);
-		message("\": Permission denied");
-		newlineX1();
-	}else{
-		delete_directory(userArg);
+	int i=0;
+	for(i=0; i < max_file_size; i++){
+		if(!strcmp(userArg, curDirectory[i].name)) {
+			if(strcmp(curDirectory[i].permissions[8],'w')){
+				message("rmdir: cannot create directory \"");
+				message(userArg);
+				message("\": Permission denied");
+				newlineX1();
+				return;
+			}else{
+				delete_directory(userArg);
+				return;
+			}
+		}
 	}
-
 }
 
 
@@ -184,9 +262,23 @@ void cat(void){
 	int i=0;
 	for(i=0; i < max_file_size; i++){
 		if(!strcmp(userArg, curDirectory[i].name)) {
-			message(curDirectory[i].desc);
-			newlineX1();
-			return;
+			if(curDirectory[i].folder == 1){
+				message("cat: cannot read file \"");
+				message(userArg);
+				message("\": is a directory");
+				newlineX1();
+				return;
+			}
+			if(strcmp( curDirectory[i].permissions[7],'r')){
+				message("cat: read file \"");
+				message(userArg);
+				message("\": Permission denied");
+				newlineX1();
+			}else{
+				message(curDirectory[i].desc);
+				newlineX1();
+				return;
+			}
 		}
 	}
 
