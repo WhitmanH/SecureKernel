@@ -28,11 +28,10 @@ void FILESYSTEM_init(void){
 void create_file_system_array(){
 	File empty={"","","","",0,0,NULL,0,0,0};
 	int i=0, j=0;
-	for( ; i<max_file_system_size; i++){
+	for( i=0; i<max_file_system_size; i++){
 		for(j=0; j<max_file_size; j++){
 			FileSystem[i][j] = empty;
 		}
-		
 	}
 }
 
@@ -55,7 +54,7 @@ void create_directory(char* name){
 			newlineX1();
 			newlineX1();
 			return;
-		}else if(curDirectory[i].folder !=0 && curDirectory[i].folder !=1){
+		}else if(curDirectory[i].folder !=2 && curDirectory[i].folder !=1){
 			//message("make new direcoty");
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, "");
@@ -105,7 +104,7 @@ void create_file(char* name, char * desc){
 			curDirectory[i].parent_index = currentDirectory;
 			curDirectory[i].children=(struct File*)FileSystem[totalFiles];
 			curDirectory[i].privilege=3;
-			curDirectory[i].folder=0;
+			curDirectory[i].folder=2;
 			curDirectory[i].index=totalFiles;
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
