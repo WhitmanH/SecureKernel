@@ -98,6 +98,11 @@ void kb_init(void){
 	write_port(0x21, 0xFD);
 }
 
+
+/*@brief Handles interrupts and getting text from terminal
+* @param None
+* @return None
+*/
 void keyboard_handler_main(void){
 	unsigned char status;
 	char keycode;

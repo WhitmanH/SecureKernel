@@ -36,12 +36,16 @@ extern char userArg4[128];
 extern int write_flag;
 extern int cur_file;
 extern unsigned char keyboard_map[128];
+extern char owner_key[];
+extern char group_key[];
+extern char public_key[];
+
 
 
 /*FILESYSTEM.C*/
 typedef struct
 {
-    char name[20];
+    char name[50];
     char pwd[50];
     char basic_path[50];
     char desc[128];
@@ -76,6 +80,9 @@ extern File* NullPage;
 extern File FileSystem[max_file_system_size][max_file_size];
 extern File FileIndex[max_file_system_size];
 
+/*crypto_xor.C*/
+extern void xor_encrypt_decrypt(char* input, int key);
+
 
 /*MEMORY.C*/
 extern void *memcpy(void *dest, const void *src, unsigned short count);
@@ -86,6 +93,7 @@ extern void paging_init(void);
 extern void create_file_system_array();
 extern int find_cur_direcroty_idnes(); 
 extern void populate_file_system();
+extern int get_least_permission_key(File cur_file);
 
 /*output.C*/
 extern void newlineX2(void);

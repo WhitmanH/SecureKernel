@@ -1,30 +1,30 @@
 #include "system.h"
 //#include "stdio.h"
-#define numberFiles 12
+#define numberFiles 13
 
-
+/*Global variables to keep track of state of the file system*/
 int totalFiles = numberFiles;
 int currentDirectory=0;
-
 int cur_file=0;
-
-
-
-/*file system */
-File FileSystem[max_file_system_size][max_file_size];
-File FileIndex[max_file_system_size];
-
 char new_path[100];
 char new_pwd[100];
 
 
+/*@brief Initializes and populates the file system, also creates example encrypted file
+* @param None
+* @return None
+*/
 void FILESYSTEM_init(void){
-
+	create_file_system_array();
 	populate_file_system();
-
-
+	initalize_crypto();
 }
 
+
+/*@brief Initializes memory for the file system.
+* @param None
+* @return None
+*/
 void create_file_system_array(){
 	File empty={"","","","",0,0,NULL,0,0,0};
 	int i=0, j=0;
@@ -37,6 +37,11 @@ void create_file_system_array(){
 
 
 
+
+/*@brief Creates a new directory, creates a new file object sets all attributes to signify its a directory.
+* @param None
+* @return None
+*/
 void create_directory(char* name){
 	int i=0;
 	
@@ -52,7 +57,6 @@ void create_directory(char* name){
 			newlineX1();
 			return;
 		}else if(curDirectory[i].folder !=2 && curDirectory[i].folder !=1){
-			//message("make new direcoty");
 			strcpy(curDirectory[i].name, name);
 			strcpy(curDirectory[i].desc, "");
 			update_pwd(name, FileIndex[currentDirectory].basic_path);
@@ -61,8 +65,6 @@ void create_directory(char* name){
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
 			curDirectory[i].folder=1;
-
-
 			strcpy(curDirectory[i].pwd, new_pwd);
 			strcpy(curDirectory[i].basic_path, new_path);
 			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
@@ -73,7 +75,6 @@ void create_directory(char* name){
 			strcpy(curDirectory[i].date, "Mar 16  2017");
 			FileIndex[totalFiles]= curDirectory[i];
 			FileIndex[currentDirectory].num_files++;
-			
 			totalFiles++; 
 			return;
 		}
@@ -83,6 +84,10 @@ void create_directory(char* name){
 }
 
 
+/*@brief Creates a new file, creates a new file object sets all attributes to signify its a file.
+* @param None
+* @return None
+*/
 void create_file(char* name, char * desc){
 	int i=0;
 	if(!strcmp(name,"")) { //Cannot make a file with no name
@@ -103,7 +108,6 @@ void create_file(char* name, char * desc){
 			curDirectory[i].privilege=3;
 			curDirectory[i].index=totalFiles;
 			curDirectory[i].folder=2;
-
 			strcpy(curDirectory[i].pwd, new_pwd);
 			strcpy(curDirectory[i].basic_path, new_path);
 			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
@@ -112,7 +116,6 @@ void create_file(char* name, char * desc){
 			strcpy(curDirectory[i].group, "camel");
 			strcpy(curDirectory[i].size, "0");
 			strcpy(curDirectory[i].date, "Mar 16  2017");
-			
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
 			FileIndex[currentDirectory].num_files++;
@@ -122,7 +125,10 @@ void create_file(char* name, char * desc){
 	message("The size of this file has exceed its maximum capcity. You directory cannot be created"); 
 }
 
-
+/*@brief Removes specified file from the file system
+* @param None
+* @return None
+*/
 void delete_file(char* name){
 	int i;
 	File empty={"","","","",0,0,NULL,0,0,0};
@@ -147,7 +153,10 @@ void delete_file(char* name){
 }
 
 
-
+/*@brief Removes specified directory from the file system
+* @param name: name of directory to be removed
+* @return None
+*/
 void delete_directory(char* name){
 	int i;
 	File empty={"","","","",0,0,NULL,0,0,0};
@@ -166,7 +175,11 @@ void delete_directory(char* name){
 	}
 }
 
-
+/*@brief Removes specified directory from the file system
+* @param name: name of current directory
+* @param parent_pwd: absolute path to the parent file
+* @return None
+*/
 void update_pwd(char* name, char* parent_pwd){
 	memset(new_path, '\0', 100);
 	memset(new_pwd, '\0', 100);

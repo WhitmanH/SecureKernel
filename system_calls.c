@@ -1,9 +1,6 @@
 #include "system.h"
 
-/*@brief Takes a string and returns the coordinating "opcode" value.
-* @param call String of system call
-* @return int Of corresponding call's opcode.
-*/
+
 int currentDirectory;
 char userArg[128];
 char userArg2[128];
@@ -18,6 +15,10 @@ struct systemCalls{
 struct systemCalls SYSTEM_CALLS[NUMBER_SYS_CALLS] = {{1, "-help"}, {2, "clear"}, {3, "echo"}, {4, "ls"}, {5, "read"}, {6, "edit"},
 														{7, "mkdir"}, {8, "rmdir"}, {9, "cd"}, {10, "run"}, {11, "cat"}, {12, "rm"}, {13, "chmod"}};
 
+/*@brief Takes a string and returns the coordinating "opcode" value.
+* @param call String of system call
+* @return int Of corresponding call's opcode.
+*/
 int commandLookup(char* call){
 	int i;
 	for(i = 0; i < NUMBER_SYS_CALLS; ++i){
@@ -27,7 +28,10 @@ int commandLookup(char* call){
 	} 
 }
 
-
+/*@brief Removes all text from screen.
+* @param None
+* @return None
+*/
 void clear(void){
 	unsigned int i = 0, j = 0;
 	/*
@@ -44,13 +48,17 @@ void clear(void){
 	current_loc = 0;
 }
 
+
+/*@brief Change permission of a given file
+* e.g. chmod 777 <file_name>
+* @param None
+* @return None
+*/
 void chmod (void){
 	int i=0, j=1, k=0;
 	int file=-1;
 	char per[3]="";
 	memset(per, '\0', 3);
-
-
 	if(!strcmp(FileIndex[currentDirectory].owner, "camel")){
 		for(i=0; i <totalFiles; i++){
 			if(!strcmp(FileIndex[i].name, userArg2)){
@@ -102,7 +110,10 @@ void chmod (void){
 		}
 }
 
-
+/*@brief Prints all support system calls to the terminal 
+* @param None
+* @return None
+*/
 void help(void){
 	newlineX2();
 	message("Currently Available System Calls:");
@@ -118,7 +129,10 @@ void help(void){
 	newlineX2();
 }
 
-
+/*@brief Displays the name of all the files in the current directory
+* @param None
+* @return None
+*/
 void ls(void){
 	int i;
 	if (!strcmp(userArg, "-la")){
@@ -152,6 +166,11 @@ void ls(void){
 	}
 }
 
+
+/*@brief change directory
+* @param None
+* @return None
+*/
 void cd(void){
 	int i;
 	char messg[2];
@@ -174,16 +193,19 @@ void cd(void){
 					message(curDirectory[i].name);
 					message("\" file");
 					newlineX1();
+					return;
 				}else if( strcmp(curDirectory[i].permissions[0],'d')){
 					message("File not folder!!!!!");
 					newlineX1();
 					message("No open for you");
 					newlineX1();
+					return;
 				}else{
 				strcpy(pwd, curDirectory[i].pwd);
 				currentDirectory = curDirectory[i].index;
 				File* temp = curDirectory;
 				curDirectory=(File*)curDirectory[i].children;
+				return;
 				
 				}
 			}
@@ -191,19 +213,28 @@ void cd(void){
 	}
 }
 
+
+/*@brief make new directory
+* @param None
+* @return None
+*/
 void mkdir(void){
 	if(strcmp(FileIndex[currentDirectory].permissions[7],'r')){
 		message("mkdir: cannot create directory \"");
 		message(userArg);
 		message("\": Permission denied");
 		newlineX1();
+		return;
 	}else{
 		create_directory(userArg);
 	}
-
-	
 }
 
+
+/*@brief print text to screen or redirect to file.
+* @param None
+* @return None
+*/
 void echo(void){
 	if(write_flag){
 		if(strcmp(FileIndex[currentDirectory].permissions[7],'r')){
@@ -211,6 +242,7 @@ void echo(void){
 			message(userArg);
 			message("\": Permission denied");
 			newlineX1();
+			return;
 		}else{
 		create_file(userArg3, userArg);
 		newlineX1();
@@ -221,6 +253,11 @@ void echo(void){
 	}
 }
 
+
+/*@brief remove a file from file system
+* @param None
+* @return None
+*/
 void rm(void){
 		int i=0;
 	for(i=0; i < max_file_size; i++){
@@ -239,6 +276,12 @@ void rm(void){
 	}
 }
 
+
+
+/*@brief remove a directory from the file system
+* @param None
+* @return None
+*/
 void rmdir(void){
 	int i=0;
 	for(i=0; i < max_file_size; i++){
@@ -258,12 +301,17 @@ void rmdir(void){
 }
 
 
+
+/*@brief Display the contents of a file to the screen
+* @param None
+* @return None
+*/
 void cat(void){
-	int i=0;
+	int i=0, key;
 	for(i=0; i < max_file_size; i++){
 		if(!strcmp(userArg, curDirectory[i].name)) {
 			if(curDirectory[i].folder == 1){
-				message("cat: cannot read file \"");
+				message("cat: cannot read file \""); 
 				message(userArg);
 				message("\": is a directory");
 				newlineX1();
@@ -275,11 +323,13 @@ void cat(void){
 				message("\": Permission denied");
 				newlineX1();
 			}else{
+				key=get_least_permission_key(curDirectory[i]);
+				xor_encrypt_decrypt(curDirectory[i].desc, key);
 				message(curDirectory[i].desc);
+				xor_encrypt_decrypt(curDirectory[i].desc, key);
 				newlineX1();
 				return;
 			}
 		}
 	}
-
 }

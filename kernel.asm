@@ -62,6 +62,7 @@ MultiBootHeader:
 entry equ (_entry - 0xC0000000)
 
 
+;derived from https://littleosbook.github.io/
 _entry: 
 	;jmp startSoteria
 	;To enable multiboot on Linux GRUB based systems, following parameters declared
