@@ -74,7 +74,6 @@ void initalize_crypto(){
 * @return None
 */
 int get_least_permission_key(File cur_file){
-    message(cur_file.permissions);
     char public = cur_file.permissions[7];
     char group = cur_file.permissions[4];
     char owner = cur_file.permissions[1];

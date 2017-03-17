@@ -110,7 +110,7 @@ void create_file(char* name, char * desc){
 			curDirectory[i].folder=2;
 			strcpy(curDirectory[i].pwd, new_pwd);
 			strcpy(curDirectory[i].basic_path, new_path);
-			strcpy(curDirectory[i].permissions, "drwxrwxrwx");
+			strcpy(curDirectory[i].permissions, "-rwxrwxrwx");
 			strcpy(curDirectory[i].links, "2");
 			strcpy(curDirectory[i].owner, "camel");
 			strcpy(curDirectory[i].group, "camel");
@@ -119,6 +119,7 @@ void create_file(char* name, char * desc){
 			FileIndex[totalFiles]= curDirectory[i];
 			totalFiles++; 
 			FileIndex[currentDirectory].num_files++;
+			xor_encrypt_decrypt(curDirectory[i].desc, 2);
 			return;
 		}
 	}
